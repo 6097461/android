@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import com.facebook.FacebookSdk;
 
+import com.google.android.gms.common.SignInButton;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
@@ -14,7 +15,8 @@ import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
 public class login extends Activity {
 
 
-    private static OAuthLoginButton mOAuthLoginButton;
+    private static OAuthLoginButton mOAuthLoginButton;//naver
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class login extends Activity {
 
         setContentView(R.layout.mylogin);
         //mOAuthLoginButton = (OAuthLoginButton) findViewById(R.id.buttonOAuthLoginImg);
+        //findViewById(R.id.sign_in_button).setOnClickListener(this);
 
 
     }
