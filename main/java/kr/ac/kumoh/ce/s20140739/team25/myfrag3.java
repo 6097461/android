@@ -19,15 +19,15 @@ public class myfrag3 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       // return super.onCreateView(inflater, container, savedInstanceState);
+        // return super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_my3, container, false);
-         Button loginbtn=(Button)rootView.findViewById(R.id.lgbtn);
-loginbtn.setOnClickListener(new View.OnClickListener(){
-    public void onClick(View v){
-        Intent intent=new Intent(getActivity(),login.class);
-        startActivity(intent);
-    }
-});
+        Button loginbtn = (Button) rootView.findViewById(R.id.lgbtn);
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), login.class);
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
