@@ -8,9 +8,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:text="관리자 센터"
+    <Button
+        android:id="@+id/roomregister"
+        android:text="방등록"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

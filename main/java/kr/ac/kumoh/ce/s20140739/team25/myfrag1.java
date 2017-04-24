@@ -76,7 +76,7 @@ public static final String ROOMTAG="RoomTag";
         return rootView;
     }
     protected void requestRoom(){
-        String url="http://192.168.123.100/select.php";
+        String url="http://127.0.0.1/select.php";
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET,url,null,
                 new Response.Listener<JSONObject>(){
                     @Override
@@ -131,11 +131,7 @@ public void drawList(){
 
         Intent intent=new Intent(getActivity(),myfrag1_1.class);
          startActivity(intent);
-       /* new AlertDialog.Builder(getActivity())
-                .setTitle("아이템선택")
-                .setMessage(rArray.get(pos).getName() + "아이템 선택")
-                .setPositiveButton("확인", null)
-                .show();*/
+
     }
 
     public class roominfo {
@@ -190,7 +186,7 @@ public void drawList(){
             }
             holder.txRoom.setText(getItem(position).getName());
             holder.txLoc.setText(getItem(position).getLoc());
-            holder.imimage.setImageUrl("http://192.168.123.100/"+getItem(position).getImage(),mImageLoader);
+            holder.imimage.setImageUrl("http://127.0.0.1/"+getItem(position).getImage(),mImageLoader);
             return convertView;
         }
     }

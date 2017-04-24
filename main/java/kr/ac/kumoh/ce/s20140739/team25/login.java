@@ -1,32 +1,31 @@
 package kr.ac.kumoh.ce.s20140739.team25;
 
 import android.app.Activity;
-import android.content.Context;
+
 import android.os.Bundle;
-import com.facebook.FacebookSdk;
-
-import com.google.android.gms.common.SignInButton;
-import com.nhn.android.naverlogin.OAuthLogin;
-import com.nhn.android.naverlogin.OAuthLoginHandler;
-import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
-
-import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
-
-public class login extends Activity {
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 
-    private static OAuthLoginButton mOAuthLoginButton;//naver
-
+public class login extends Activity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.mylogin);
-        //mOAuthLoginButton = (OAuthLoginButton) findViewById(R.id.buttonOAuthLoginImg);
-        //findViewById(R.id.sign_in_button).setOnClickListener(this);
 
 
+    }
+    public void nbtnclick(View v){
+        Log.i("server request","naver");
+    }
+    public void fbtnclick(View v){
+        Log.i("server request","facebook");
+    }
+    public void gbtnclick(View v){
+        Log.i("server request","google");
     }
 
 
