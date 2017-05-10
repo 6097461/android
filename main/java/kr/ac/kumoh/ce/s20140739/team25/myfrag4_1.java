@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public class roomregister extends Activity {
+public class myfrag4_1 extends Activity {
     final int PICK_IMAGE = 100;
     TextView tv;
     EditText e1;
@@ -31,13 +30,14 @@ public class roomregister extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.roomregister);
+        setContentView(R.layout.myfrag4_1);
         e1 = (EditText) findViewById(R.id.name);
         e2 = (EditText) findViewById(R.id.address);
         e3 = (EditText) findViewById(R.id.detail);
         btn = (Button) findViewById(R.id.btn);
         tv = (TextView) findViewById(R.id.tv);
         btn.setOnClickListener(myClickListner);
+
 
     }
 
@@ -100,13 +100,19 @@ public class roomregister extends Activity {
 
         return imgName;
     }
-    View.OnClickListener myClickListner = new View.OnClickListener() {
+    /*View.OnClickListener myClickListner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             String temp = "{\"img\""+":"+"\""+name_Str+"\""+","+"\"name\"" + ":" + "\"" + e1.getText().toString() + "\"" + "," + "\"address\"" + ":" + "\"" + e2.getText().toString() +
                     "\"" + "," + "\"상세정보\"" + ":" + "\"" + e3.getText().toString() + "\"" + "}";
             tv.setText(temp);
         }
+    };*/
+    View.OnClickListener myClickListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(myfrag4_1.this, myfrag4_2.class);
+            startActivity(intent);        }
     };
 
 }

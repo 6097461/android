@@ -19,10 +19,10 @@ public class myfrag4 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        // return super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_my4, container, false);
-        Button loginbtn = (Button) rootView.findViewById(R.id.roomregister);
+        Button loginbtn = (Button) rootView.findViewById(R.id.RR);
         loginbtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), roomregister.class);
+                Intent intent = new Intent(getActivity(), myfrag4_1.class);
                 startActivity(intent);
             }
         });

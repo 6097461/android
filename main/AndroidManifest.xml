@@ -22,8 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".myfrag1_1" />
+        <activity android:name=".myfrag1_2" />
         <activity android:name=".login" />
-        <activity android:name=".roomregister" />
+        <activity android:name=".myfrag4_1" />
+        <activity android:name=".myfrag4_2" />
+        <activity android:name=".myfrag4_3" />
     </application>
 
 </manifest>
