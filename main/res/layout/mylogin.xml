@@ -15,20 +15,20 @@
     android:text="Login"
     android:textSize="40dp"
     android:textAlignment="center"/>
-  <Button
-      android:id="@+id/naverbtn"
+  <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
+
+      android:id="@+id/buttonOAuthLoginImg"
       android:layout_width="wrap_content"
-      android:layout_height="50dp"
-      android:layout_marginTop="240dp"
-      android:onClick="nbtnclick"
-      android:background="@drawable/loginbtn"/>
-  <Button
-      android:id="@+id/facebookbtn"
+      android:layout_marginTop="250dp"
+      android:layout_height="50dp" />
+  <com.facebook.login.widget.LoginButton
+      android:id="@+id/login_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textSize="30dp"
       android:layout_marginTop="10dp"
-      android:layout_width="wrap_content"
-      android:layout_height="50dp"
-      android:onClick="fbtnclick"
-      android:background="@drawable/facebookbtn"/>
+      android:layout_marginBottom="30dp" />
   <Button
       android:id="@+id/googlebtn"
       android:layout_marginTop="10dp"

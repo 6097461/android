@@ -76,7 +76,7 @@ public static final String ROOMTAG="RoomTag";
         return rootView;
     }
     protected void requestRoom(){
-        String url="http://192.168.123.100/select.php";
+        String url="http://192.168.123.102/select.php";
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET,url,null,
                 new Response.Listener<JSONObject>(){
                     @Override
@@ -186,7 +186,7 @@ public void drawList(){
             }
             holder.txRoom.setText(getItem(position).getName());
             holder.txLoc.setText(getItem(position).getLoc());
-            holder.imimage.setImageUrl("http://192.168.123.100/"+getItem(position).getImage(),mImageLoader);
+            holder.imimage.setImageUrl("http://192.168.123.102/"+getItem(position).getImage(),mImageLoader);
             return convertView;
         }
     }
