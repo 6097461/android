@@ -22,9 +22,16 @@ public class myfrag3 extends Fragment {
         // return super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_my3, container, false);
         Button loginbtn = (Button) rootView.findViewById(R.id.lgbtn);
+        Button loginresultbtn = (Button) rootView.findViewById(R.id.lgresultbtn);
         loginbtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), login.class);
+                startActivity(intent);
+            }
+        });
+        loginresultbtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), myfrag3_1.class);
                 startActivity(intent);
             }
         });

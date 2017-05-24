@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/image"
+    <ImageView
+        android:id="@+id/studyroomimage"
         android:layout_width="130dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"

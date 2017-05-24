@@ -2,6 +2,9 @@ package kr.ac.kumoh.ce.s20140739.team25;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +39,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,153 +52,104 @@ import java.util.List;
  * Created by 60974 on 2017-04-04.
  */
 
-public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener {
-
-    protected ArrayList<roominfo> rArray = new ArrayList<roominfo>();
-public static final String ROOMTAG="RoomTag";
-    protected JSONObject mResult=null;
-    protected  ListView mList;
-    protected roomAdapter mAdapter;
-    protected RequestQueue mQueue;
-    protected ImageLoader mImageLoader=null;
+public class myfrag1 extends Fragment  {
+    TextView name, address;
+   // TextView id,img,adminId;
+    ImageView imView;
+    String imgUrl = "", result;
+    Bitmap bmImg;
+    back task;
 
     @Nullable
     @Override
-
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // return super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_my1, container, false);
+        View rootView = inflater.inflate(R.layout.listitem1,null);
+        imView = (ImageView)rootView.findViewById(R.id.iii);
+       // id = (TextView)rootView.findViewById(R.id.id);
+       // img = (TextView)rootView.findViewById(R.id.img);
+        name = (TextView)rootView.findViewById(R.id.name);
+        address = (TextView)rootView.findViewById(R.id.address);
+        //adminId = (TextView)rootView.findViewById(R.id.adminId);
 
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,rArray);
-        mAdapter = new roomAdapter(getActivity(),R.layout.listitem1, rArray);
-        mList = (ListView) rootView.findViewById(R.id.listview1);
-        mList.setAdapter(mAdapter);
-        mList.setOnItemClickListener(this);
-
-        Cache cache=new DiskBasedCache(getActivity().getCacheDir(),1024*1024);
-        Network network=new BasicNetwork(new HurlStack());
-        mQueue=new RequestQueue(cache,network);
-        mQueue.start();
-        mImageLoader=new ImageLoader(mQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getActivity())));
-        requestRoom();
-
+        task = new back();
+//        task.execute(imgUrl+"img1");
+        task.execute("http://192.168.0.58:3003/home/list");
         return rootView;
     }
-    protected void requestRoom(){
-        String url="http://192.168.123.102/select.php";
-        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET,url,null,
-                new Response.Listener<JSONObject>(){
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        mResult=response;
-                        drawList();
-                    }
-                },
-        new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),"서버에러",Toast.LENGTH_LONG).show();
-            }
-        }
-        );
-        jsonObjectRequest.setTag(ROOMTAG);
-        mQueue.add(jsonObjectRequest);
-    }
-public void drawList(){
-    rArray.clear();
-    try{
-        JSONArray jsonMainNode=mResult.getJSONArray("list");
-        for(int i=0;i<jsonMainNode.length();i++) {
-            JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-            String rname = jsonChildNode.getString("rname");
-            Log.i("rname", rname);
-            String loc = jsonChildNode.getString("loc");
-            Log.i("loc", loc);
-            String image = jsonChildNode.getString("image");
-            Log.i("image", image);
-            rArray.add(new roominfo(rname, loc,image));
-        }
-
-        }
-    catch(JSONException | NullPointerException e){
-        Toast.makeText(getActivity().getApplicationContext(),"Error"+e.toString(),Toast.LENGTH_LONG).show();
-        mResult=null;
-    }
-   mAdapter.notifyDataSetChanged();
-}
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(mQueue!=null){
-            mQueue.cancelAll(ROOMTAG);
-        }
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-
-        Intent intent=new Intent(getActivity(),myfrag1_1.class);
-         startActivity(intent);
-
-    }
-
-    public class roominfo {
-        String name;
-        String loc;
-        String image;
-
-        public roominfo(String name, String loc,String image) {
-            this.name = name;
-            this.loc = loc;
-            this.image=image;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getLoc() {
-            return loc;
-        }
-        public String getImage() {
-            return image;
-        }
-    }
-
-    static class RoomViewHolder {
-        TextView txRoom;
-        TextView txLoc;
-        NetworkImageView imimage;
-    }
-
-    public class roomAdapter extends ArrayAdapter<roominfo> {
-
-        public roomAdapter(Context context, int resource, List<roominfo> objects) {
-            super(context, resource, objects);
-        }
-
-        @NonNull
+    private class back extends AsyncTask<String, Integer, String> {
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            RoomViewHolder holder;
-            if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.listitem1, parent, false);
-                holder = new RoomViewHolder();
-                holder.txRoom = (TextView) convertView.findViewById(R.id.name);
-                holder.txLoc=(TextView) convertView.findViewById(R.id.location);
-               holder.imimage=(NetworkImageView)convertView.findViewById(R.id.image);
-                convertView.setTag(holder);
+        public String doInBackground(String... urls) {
+            // TODO Auto-generated method stub
+            // 이미지 URL받고 나머지 JSON값 받아서 띄우기
+            Log.i("task", "실행?");
 
-            } else {
-                holder = (RoomViewHolder) convertView.getTag();
+            try{
+                URL myFileUrl = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+                Log.i("task", "연결?");
+
+                conn.connect();
+                Log.i("task", "연결!");
+
+                Log.i("task", "비트맵?");
+                InputStream inputStream = conn.getInputStream();
+
+                if(inputStream != null)
+                    result = convertInputStreamToString(inputStream);
+                else
+                    result = "Did not work!";
+
+
+//                bmImg = BitmapFactory.decodeStream(is);
+                Log.i("task", "비트맵!");
+
+            }catch(IOException e){
+                e.printStackTrace();
             }
-            holder.txRoom.setText(getItem(position).getName());
-            holder.txLoc.setText(getItem(position).getLoc());
-            holder.imimage.setImageUrl("http://192.168.123.102/"+getItem(position).getImage(),mImageLoader);
-            return convertView;
+            return result;
+        }
+
+        protected void onPostExecute(String str){
+            private ArrayList<infoo> infoList;
+            infoList=new ArrayList<infoo>();
+            imView.setImageBitmap(bmImg);
+            try {
+                JSONObject jsResult = new JSONObject(str);
+                JSONArray infolist = jsResult.getJSONArray("list");
+
+                for(int i=0; i < infolist.length(); i++) {
+                    JSONObject jsonObject = infolist.getJSONObject(i);
+
+
+                  //  String idd = jsonObject.getString("id");
+                   // String imgg = jsonObject.getString("img");
+                    String namee = jsonObject.getString("name");
+                    String addresss = jsonObject.getString("address");
+                   // String adminIdd = jsonObject.getString("adminId");
+
+                    //id.setText(id.getText() + ", " + idd);
+                   // img.setText(img.getText() + ", " + imgg);
+                    name.setText(name.getText() + ", " + namee);
+                    address.setText(address.getText() + ", " + addresss);
+                    //adminId.setText(adminId.getText() + ", " + adminIdd);
+                }
+            }
+            catch (JSONException e) {
+                Toast.makeText(getActivity(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+        private String convertInputStreamToString(InputStream inputStream) throws IOException{
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+            String line = "";
+            String result = "";
+            while((line = bufferedReader.readLine()) != null)
+                result += line;
+            inputStream.close();
+            return result;
+
         }
     }
-
 }
