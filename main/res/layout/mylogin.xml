@@ -12,28 +12,34 @@
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Login"
+    android:layout_marginTop="20dp"
+    android:text="LOGIN"
+    android:textColor="#000"
+    android:textStyle="bold"
     android:textSize="40dp"
     android:textAlignment="center"/>
   <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
 
       android:id="@+id/buttonOAuthLoginImg"
-      android:layout_width="wrap_content"
-      android:layout_marginTop="250dp"
-      android:layout_height="50dp" />
+      android:layout_width="330dp"
+      android:layout_gravity="center"
+      android:layout_marginTop="280dp"
+      android:layout_height="50dp"
+      android:layout_marginBottom="10dp"/>
   <com.facebook.login.widget.LoginButton
       android:id="@+id/login_button"
-      android:layout_width="wrap_content"
+      android:layout_width="330dp"
       android:layout_height="wrap_content"
       android:layout_gravity="center_horizontal"
       android:textSize="30dp"
-      android:layout_marginTop="10dp"
-      android:layout_marginBottom="30dp" />
+
+      android:layout_marginBottom="10dp" />
   <Button
       android:id="@+id/googlebtn"
-      android:layout_marginTop="10dp"
-      android:layout_width="wrap_content"
+
+      android:layout_width="330dp"
       android:layout_height="50dp"
+      android:layout_gravity="center"
       android:onClick="gbtnclick"
       android:background="@drawable/googlebtn"/>
 

@@ -25,12 +25,11 @@
         android:layout_height="wrap_content"
         android:text="시간선택"
         android:textSize="30dp"/>
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="152dp"
-        android:layout_gravity="center"
-        android:timePickerMode="spinner">
-    </TimePicker>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+    </ScrollView>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

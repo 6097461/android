@@ -51,14 +51,15 @@ public class login extends Activity {
     private static Context mContext;
     private CallbackManager callbackManager = CallbackManager.Factory.create();
     static String token;
-    static String json="", strCookie;
+    static String json="", cookieString="";
     loginDB logindb;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         logindb = new loginDB();
-        /////////////////
+
 
         FacebookSdk.sdkInitialize(this.getApplicationContext());
 
@@ -66,21 +67,19 @@ public class login extends Activity {
         setContentView(R.layout.mylogin);
 
         mOAuthLoginModule = OAuthLogin.getInstance();
-        mOAuthLoginModule.init(
-                mContext
-                , "XrgiqeOS9rEeJJ35jxmt"
-                , "PyWxIsxzTq"
-                , "6097461"
-                //,OAUTH_CALLBACK_INTENT
-                // SDK 4.1.4 버전부터는 OAUTH_CALLBACK_INTENT변수를 사용하지 않습니다.
-        );
-        mOAuthLoginButton = (OAuthLoginButton) findViewById(R.id.buttonOAuthLoginImg);
-        mOAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
-        mOAuthLoginButton.setBgResourceId(R.drawable.naverbtn);
-//facebook
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            mOAuthLoginModule.init(
+            mContext
+            , "XrgiqeOS9rEeJJ35jxmt"
+                    , "PyWxIsxzTq"
+                    , "6097461"
+                                      );
+            mOAuthLoginButton = (OAuthLoginButton) findViewById(R.id.buttonOAuthLoginImg);
+            mOAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
+            mOAuthLoginButton.setBgResourceId(R.drawable.naverbtn);
+            //facebook
+            LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+            loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -95,6 +94,7 @@ public class login extends Activity {
                 parameters.putString("fields", "id,name,email,gender,birthday");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
+                finish();
             }
 
             @Override
@@ -107,6 +107,7 @@ public class login extends Activity {
                 Log.e("LoginErr", error.toString());
             }
         });
+
     }
 
     @Override
@@ -126,7 +127,7 @@ public class login extends Activity {
                 Log.i("출력", accessToken);
                 token = accessToken;
                 logindb.execute();
-
+                finish();
 
             } else {
                 String errorCode = mOAuthLoginModule.getLastErrorCode(mContext).getCode();
@@ -188,6 +189,20 @@ public class login extends Activity {
             wr.flush();
             wr.close();
 
+            Map<String, List<String>> headerFields = con.getHeaderFields();
+            List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+
+            if(cookiesHeader != null) {
+                for (String cookie : cookiesHeader) {
+                    String cookieName = HttpCookie.parse(cookie).get(0).getName();
+                    String cookieValue = HttpCookie.parse(cookie).get(0).getValue();
+
+                    cookieString = cookieName + "=" + cookieValue;
+
+                    CookieManager.getInstance().setCookie("http://192.168.0.58:3003", cookieString);
+
+                }
+            }
             Log.i("login", "쓰기성공!");
 
             int responseCode = con.getResponseCode();
@@ -196,20 +211,13 @@ public class login extends Activity {
                 //              br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 Log.i("login", "정상");
 
+
             } else {  // 에러 발생
                 //             br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                 Log.i("login", "에러!");
 
             }
-                /*
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-                while ((inputLine = br.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                br.close();
-                System.out.println(response.toString());
-                */
+
         } catch (Exception e) {
             System.out.println(e);
         }

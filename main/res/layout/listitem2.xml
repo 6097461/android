@@ -6,18 +6,18 @@
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
 
     <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/image"
+        android:id="@+id/srimage"
         android:layout_width="130dp"
         android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:background="@android:drawable/alert_light_frame"
         android:scaleType="centerCrop"
-        android:padding="16dp"/>
+        android:padding="1dp"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="20dp"
-    android:padding="16dp"
+    android:padding="1dp"
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
@@ -26,14 +26,25 @@
         android:textSize="24dp"
         android:textColor="#000000"
            />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최대수용인원:"
+            android:textSize="16dp"
+            android:textColor="#666666"
+            />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/max"
         android:textSize="16dp"
         android:textColor="#666666"
-
         />
+    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

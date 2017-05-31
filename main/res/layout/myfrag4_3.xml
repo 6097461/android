@@ -37,6 +37,11 @@
       android:layout_height="wrap_content"
       android:hint="예약 가능 최대 인원"/>
   <EditText
+      android:id="@+id/ip"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="IP주소를 입력하세요."/>
+  <EditText
       android:id="@+id/etc"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
