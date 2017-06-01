@@ -5,12 +5,13 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:fitsSystemWindows="true"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity">
 
     <android.support.design.widget.AppBarLayout
     android:id="@+id/appbar"
-
+        android:background="#0D4887"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/appbar_padding_top"
@@ -18,7 +19,7 @@
     android:theme="@style/AppTheme.AppBarOverlay">
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
-
+        android:background="#0D4887"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

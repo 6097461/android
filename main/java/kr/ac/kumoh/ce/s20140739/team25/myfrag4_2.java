@@ -72,8 +72,7 @@ public class myfrag4_2 extends Activity  {
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
         myfrag4_2.back task = new myfrag4_2.back();
-        task.execute("http://192.168.0.58:3003/");
-
+        task.execute("http://192.168.0.58:3003/host/info");
 
     }
     private class back extends AsyncTask<String, Integer, String> {
