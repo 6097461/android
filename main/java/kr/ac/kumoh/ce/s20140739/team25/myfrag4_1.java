@@ -56,6 +56,9 @@ public class myfrag4_1 extends Activity {
 
         btn = (Button) findViewById(R.id.btn);
         btn.setOnClickListener(myClickListner);
+
+
+
     }
 
     public void init_webView() {
@@ -66,8 +69,7 @@ public class myfrag4_1 extends Activity {
 
         webView.addJavascriptInterface(new AndroidBridge(), "TestApp");
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("http://codeman77.ivyro.net/getAddress.php");
-
+        webView.loadUrl("file:///android_asset/daum.html");
     }
 
     private class AndroidBridge {

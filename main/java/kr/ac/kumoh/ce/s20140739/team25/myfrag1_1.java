@@ -60,12 +60,13 @@ public class myfrag1_1 extends Activity {
     protected myfrag1_1.sroomAdapter mAdapter;
     protected RequestQueue mQueue = null;
     protected ImageLoader mImageLoader = null;
+    ImageView map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_my1_1);
-
+        map=(ImageView)findViewById(R.id.map);
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
         String img=intent.getStringExtra("img");

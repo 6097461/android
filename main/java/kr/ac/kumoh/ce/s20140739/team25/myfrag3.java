@@ -46,14 +46,17 @@ import java.util.List;
 
 public class myfrag3 extends Fragment {
 
-    protected ArrayList<myfrag3.reservinfo> rArray = new ArrayList<myfrag3.reservinfo>();
+    protected ArrayList<reservinfo> rArray = new ArrayList<reservinfo>();
 
 
-    protected JSONObject mResult = null;
+
     protected ListView mList;
-    protected myfrag3.reservAdapter mAdapter;
+    protected reservAdapter mAdapter;
     protected RequestQueue mQueue = null;
     protected ImageLoader mImageLoader = null;
+    TextView name;
+    TextView phone;
+    TextView email;
 
 
     String result="";
@@ -62,15 +65,18 @@ public class myfrag3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my3, container, false);
-        rArray = new ArrayList<myfrag3.reservinfo>();
-        mAdapter = new myfrag3.reservAdapter(getActivity(), R.layout.listitem3, rArray);
+        rArray = new ArrayList<reservinfo>();
+        mAdapter = new reservAdapter(getActivity(), R.layout.listitem3, rArray);
         mList = (ListView) rootView.findViewById(R.id.reservlist);
+        mList.setAdapter(mAdapter);
         Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024);
         Network network = new BasicNetwork(new HurlStack());
         mQueue = new RequestQueue(cache, network);
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(getActivity())));
-
+        name=(TextView)rootView.findViewById(R.id.name);
+        phone=(TextView)rootView.findViewById(R.id.phone);
+        email=(TextView)rootView.findViewById(R.id.email);
         back task = new back();
         task.execute("http://192.168.0.58:3003/my/info");
 
@@ -90,9 +96,8 @@ public class myfrag3 extends Fragment {
                 URL myFileUrl = new URL(urls[0]);
                 HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
                 conn.setRequestMethod("GET");
-                if(login.cookieString != "") {
+                if(login.cookieString != "")
                     conn.setRequestProperty("Cookie", login.cookieString);
-                }
                 conn.setDoInput(true);
 
                 Log.i("task", "연결?");
@@ -112,9 +117,6 @@ public class myfrag3 extends Fragment {
                 else
                     result = "Did not work!";
 
-                Log.i("task", "비트맵!");
-
-
             }catch(IOException e){
                 e.printStackTrace();
             }
@@ -130,7 +132,8 @@ public class myfrag3 extends Fragment {
                 Log.i("reservationlist.length", ""+reservationlist.length());
                 String id = user.getString("id");
                 String dpName = user.getString("displayName");
-
+                name.setText(dpName);
+                Log.i("str", str);
 
                 for(int i=0; i < reservationlist.length(); i++) {
                     JSONObject jsonObject = reservationlist.getJSONObject(i);
@@ -143,9 +146,15 @@ public class myfrag3 extends Fragment {
                     String time = jsonObject.getString("time");
                     String people = jsonObject.getString("number");
 
-                    rArray.add(new myfrag3.reservinfo(image,idd,rname,sname,address,date,time,people));
+
+                    rArray.add(new reservinfo(image,idd,rname,sname,address,date,time,people));
 
                 }
+                Log.i("post끗", "끝");
+
+                mAdapter.notifyDataSetChanged();
+                Log.i("post끗", "진짜끝");
+
             }
             catch (JSONException e) {
                 Toast.makeText(getActivity(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
@@ -184,7 +193,7 @@ public class myfrag3 extends Fragment {
             this.people=people;
         }
 
-        public String getRname() {           return rname;        }
+        public String getRname() { return rname; }
         public String getSname() {
             return sname;
         }
@@ -216,19 +225,19 @@ public class myfrag3 extends Fragment {
         NetworkImageView imimage;
     }
 
-    public class reservAdapter extends ArrayAdapter<myfrag3.reservinfo> {
+    public class reservAdapter extends ArrayAdapter<reservinfo> {
 
-        public reservAdapter(Context context, int resource, List<myfrag3.reservinfo> objects) {
+        public reservAdapter(Context context, int resource, List<reservinfo> objects) {
             super(context, resource, objects);
         }
 
         @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            myfrag3.reservViewHolder holder;
+            reservViewHolder holder;
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.listitem3, parent, false);
-                holder = new myfrag3.reservViewHolder();
+                holder = new reservViewHolder();
                 holder.txrname = (TextView) convertView.findViewById(R.id.rname);
                 holder.txsname = (TextView) convertView.findViewById(R.id.sname);
                 holder.txaddress = (TextView) convertView.findViewById(R.id.address);
@@ -239,7 +248,7 @@ public class myfrag3 extends Fragment {
                 convertView.setTag(holder);
 
             } else {
-                holder = (myfrag3.reservViewHolder) convertView.getTag();
+                holder = (reservViewHolder) convertView.getTag();
             }
             holder.txrname.setText(getItem(position).getRname());
             holder.txsname.setText(getItem(position).getSname());
