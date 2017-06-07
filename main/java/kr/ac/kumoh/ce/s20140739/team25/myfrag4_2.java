@@ -216,4 +216,7 @@ public class myfrag4_2 extends Activity  {
        Intent intent = new Intent(myfrag4_2.this, myfrag4_3.class);
        startActivity(intent);
    }
+    public void finishregister(View v){
+       //서버랑 연결
+    }
 }

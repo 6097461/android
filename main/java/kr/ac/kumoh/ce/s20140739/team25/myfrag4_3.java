@@ -60,6 +60,7 @@ public class myfrag4_3 extends Activity {
         startActivityForResult(intent, PICK_IMAGE);
     }
 
+
     public String POST(String url){
         InputStream is = null;
         String result = "";
@@ -215,9 +216,12 @@ public class myfrag4_3 extends Activity {
     View.OnClickListener myClickListner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            HttpAsyncTask httpTask = new HttpAsyncTask();
-            httpTask.execute("http://192.168.0.58:3003/host/insert");
-            finish();
+            Intent intent=new Intent(myfrag4_3.this,myfrag4_2.class);
+            startActivity(intent);
+            //or finish();
+//            HttpAsyncTask httpTask = new HttpAsyncTask();
+//            httpTask.execute("http://192.168.0.58:3003/host/insert");
+//            finish();
         }
     };
 

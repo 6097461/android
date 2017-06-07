@@ -48,16 +48,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="400dp">
             </ListView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Naver지도 mapping"/>
 
 
-<ImageView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/map"/>
+            <com.nhn.android.maps.NMapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical"/>
+
     </LinearLayout>
 
 </ScrollView>

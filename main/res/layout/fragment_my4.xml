@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+   android:background="#fff"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
 <TextView
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="등록된 공간"
+    android:paddingBottom="3dp"
+    android:background="@drawable/back"
+    android:textColor="#000"
     android:textSize="30dp"/>
     <ScrollView
         android:layout_width="match_parent"
@@ -25,14 +25,17 @@
 
     <Button
         android:id="@+id/RR"
-        android:text="+"
+        android:background="@drawable/plus"
         android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="예약자 명단"
+        android:paddingBottom="3dp"
+        android:background="@drawable/back"
+        android:textColor="#000"
         android:textSize="30dp"/>
     <ScrollView
         android:layout_width="match_parent"
@@ -43,6 +46,5 @@
             android:layout_height="wrap_content">
         </ListView>
     </ScrollView>
-
 
 </LinearLayout>

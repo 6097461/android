@@ -35,12 +35,10 @@ public class myfrag4_1 extends Activity {
     final int PICK_IMAGE = 100;
 
     EditText e1;
-    Button btn;
+    EditText adr;
     String name_Str, pickpath;
     Uri uri;
-    private WebView webView;
-    TextView result;
-    private Handler handler;
+
 
 
     @Override
@@ -49,44 +47,13 @@ public class myfrag4_1 extends Activity {
 
         setContentView(R.layout.myfrag4_1);
         e1 = (EditText) findViewById(R.id.name);
-        result = (TextView) findViewById(R.id.result);
-        init_webView();
-        handler = new Handler();
-
-
-        btn = (Button) findViewById(R.id.btn);
-        btn.setOnClickListener(myClickListner);
-
-
+        adr= (EditText) findViewById(R.id.adr);
 
     }
 
-    public void init_webView() {
-        webView = (WebView) findViewById(R.id.address);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
 
-        webView.addJavascriptInterface(new AndroidBridge(), "TestApp");
-        webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("file:///android_asset/daum.html");
-    }
 
-    private class AndroidBridge {
-
-        @JavascriptInterface
-        public void setAddress(final String arg1, final String arg2, final String arg3) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    result.setText(String.format("(%s) %s %s", arg1, arg2, arg3));
-
-                    init_webView();
-                }
-            });
-        }
-    }
 
     public void imgclick(View v) {
         doTakeAlbumAction();
@@ -128,7 +95,7 @@ public class myfrag4_1 extends Activity {
             dos.writeUTF("Content-Disposition: form-data; name=\"name\"\r\n\r\n" + e1.getText().toString());
             dos.writeUTF(lineEnd);
             dos.writeUTF(twoHyphens + boundary + lineEnd);
-            dos.writeUTF("Content-Disposition: form-data; name=\"address\"\r\n\r\n" + result.toString());
+            dos.writeUTF("Content-Disposition: form-data; name=\"address\"\r\n\r\n" + adr.getText().toString());
             dos.writeUTF(lineEnd);
             Log.i("죽을랑가!!!!!", "!! !!!");
 
@@ -247,15 +214,7 @@ public class myfrag4_1 extends Activity {
         return imgName;
     }
 
-    View.OnClickListener myClickListner = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(myfrag4_1.this, myfrag4_2.class);
-            HttpAsyncTask httpTask = new HttpAsyncTask();
-            httpTask.execute("http://192.168.0.58:3003/host/add");
-            startActivity(intent);
-        }
-    };
+
 
     private static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -266,5 +225,12 @@ public class myfrag4_1 extends Activity {
 
         inputStream.close();
         return result;
+    }
+    public void register1(View v){
+
+            HttpAsyncTask httpTask = new HttpAsyncTask();
+            httpTask.execute("http://192.168.0.58:3003/host/add");
+        finish();
+
     }
 }

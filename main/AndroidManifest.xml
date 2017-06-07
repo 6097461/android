@@ -47,6 +47,8 @@
         <activity android:name=".myfrag4_1" />
         <activity android:name=".myfrag4_2" />
         <activity android:name=".myfrag4_3" />
+
+
     </application>
 
 </manifest>

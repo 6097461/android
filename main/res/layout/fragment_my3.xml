@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="사용자 정보"
-        android:gravity="center"
+        android:paddingBottom="3dp"
         android:background="@drawable/back"
         android:textColor="#000"
         android:textSize="25dp" />
@@ -64,8 +64,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="예약"
+        android:paddingBottom="3dp"
         android:background="@drawable/back"
-        android:gravity="center"
+
         android:textColor="#000"
         android:textSize="25dp" />
 
