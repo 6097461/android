@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 
 public class myfrag4_1 extends Activity {
@@ -91,12 +92,12 @@ public class myfrag4_1 extends Activity {
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 
             //text 전송
-            dos.writeUTF(twoHyphens + boundary + lineEnd);
-            dos.writeUTF("Content-Disposition: form-data; name=\"name\"\r\n\r\n" + e1.getText().toString());
-            dos.writeUTF(lineEnd);
-            dos.writeUTF(twoHyphens + boundary + lineEnd);
-            dos.writeUTF("Content-Disposition: form-data; name=\"address\"\r\n\r\n" + adr.getText().toString());
-            dos.writeUTF(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"name\"\r\n\r\n" + URLEncoder.encode(e1.getText().toString(), "utf-8"));
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"address\"\r\n\r\n" + URLEncoder.encode(adr.getText().toString(), "utf-8"));
+            dos.writeBytes(lineEnd);
             Log.i("죽을랑가!!!!!", "!! !!!");
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
@@ -229,7 +230,7 @@ public class myfrag4_1 extends Activity {
     public void register1(View v){
 
             HttpAsyncTask httpTask = new HttpAsyncTask();
-            httpTask.execute("http://192.168.0.58:3003/host/add");
+            httpTask.execute(MainActivity.SERVER_IP_PORT+"/host/add");
         finish();
 
     }

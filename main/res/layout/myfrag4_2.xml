@@ -1,47 +1,59 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="세부방 등록"
-    android:textStyle="bold"
-    android:textSize="24dp"/>
-
-    <ListView
-        android:id="@+id/SR_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
-
-
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-     android:gravity="bottom"
-    android:orientation="vertical">
-    <Button
-        android:id="@+id/SRR"
-        android:text="+"
-        android:onClick="SRRclick"
-        android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/finish"
-        android:onClick="finishregister"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="완료"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="세부방 등록"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/SR_list"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"></ListView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/SRR"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="right"
+                android:background="@drawable/plus"
+                android:onClick="SRRclick" />
+
+            <Button
+                android:id="@+id/finish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="finishregister"
+                android:text="완료" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

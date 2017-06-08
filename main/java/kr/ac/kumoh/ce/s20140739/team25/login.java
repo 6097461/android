@@ -12,6 +12,7 @@ import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -50,16 +51,19 @@ public class login extends Activity {
     private static OAuthLoginButton mOAuthLoginButton;
     private static Context mContext;
     private CallbackManager callbackManager = CallbackManager.Factory.create();
-    static String token;
+    String token;
+    String id;
+    String name;
     static String json="", cookieString="";
-    loginDB logindb;
 
+    private static final int NAVER_LOGIN = 1;
+    private static final int FACEBOOK_LOGIN = 1;
+
+    int login_i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        logindb = new loginDB();
-
 
         FacebookSdk.sdkInitialize(this.getApplicationContext());
 
@@ -82,12 +86,24 @@ public class login extends Activity {
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.i("result", object.toString());
+                        Log.i("facebookresult", object.toString());
+                        try{
+                            id = object.getString("id");
+                            name = object.getString("name");
+                            login_i = FACEBOOK_LOGIN;
+                            facebookloginDB logindb = new facebookloginDB();
+                            logindb.execute();
+                            finish();
+                        }
+                        catch (Exception e) {
+
+                        }
                     }
+
                 });
 
                 Bundle parameters = new Bundle();
@@ -126,6 +142,8 @@ public class login extends Activity {
                 String tokenType = mOAuthLoginModule.getTokenType(mContext);
                 Log.i("출력", accessToken);
                 token = accessToken;
+                login_i = NAVER_LOGIN;
+                naverloginDB logindb = new naverloginDB();
                 logindb.execute();
                 finish();
 
@@ -136,55 +154,48 @@ public class login extends Activity {
                         + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
             }
         }
-
-
     };
 
-    public class loginDB extends AsyncTask<Void, Integer, Void> {
+     public class naverloginDB extends AsyncTask<Void, Integer, Void> {
         @Override
         protected Void doInBackground(Void... unused) {
-            POST();
-
+            naverPOST();
             return null;
         }
-
     }
 
-    public static String POST() {
+    public String naverPOST() {
         try {
-
+            String apiURL = "";
             Log.i("login", "execute시작!");
 
             String COOKIES_HEADER = "Set-Cookie";
+            apiURL = MainActivity.SERVER_IP_PORT+"/auth/naver";
 
-            String apiURL = "http://192.168.0.58:3003/auth/naver";
-//            String apiURL = "http://hmkcode.appspot.com/jsonservlet";
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             Log.i("login", "연결!?!?!?!");
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestMethod("POST");
-            Log.i("login", "연결1/2");
 
             con.setDoInput(true);
             con.setDoOutput(true);
             con.setUseCaches(false);
             con.setDefaultUseCaches(false);
-//            strCookie = con.getHeaderField("Set-Cookie");
-//            Log.i("쿠키쿠키", strCookie);
+
             Log.i("login", "연결직전");
             con.connect();
 
-
             Log.i("login", "연결!");
-
             JSONObject data = new JSONObject();
+
             data.accumulate("access_token", token);
             json = data.toString();
             Log.i("JSONdata", json);
 
             OutputStream wr = con.getOutputStream();
+
             wr.write(json.getBytes("utf-8"));
             wr.flush();
             wr.close();
@@ -199,23 +210,18 @@ public class login extends Activity {
 
                     cookieString = cookieName + "=" + cookieValue;
 
-                    CookieManager.getInstance().setCookie("http://192.168.0.58:3003", cookieString);
+                    CookieManager.getInstance().setCookie(MainActivity.SERVER_IP_PORT, cookieString);
 
                 }
             }
             Log.i("login", "쓰기성공!");
 
             int responseCode = con.getResponseCode();
-            //         BufferedReader br;
+
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                //              br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 Log.i("login", "정상");
-
-
-            } else {  // 에러 발생
-                //             br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            } else {
                 Log.i("login", "에러!");
-
             }
 
         } catch (Exception e) {
@@ -224,6 +230,83 @@ public class login extends Activity {
         return null;
     }
 
+    public class facebookloginDB extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected Void doInBackground(Void... unused) {
+            facebookPOST();
+            return null;
+        }
+    }
+
+    public String facebookPOST() {
+        try {
+            String apiURL = "";
+            Log.i("login", "execute시작!");
+
+            String COOKIES_HEADER = "Set-Cookie";
+
+            apiURL = MainActivity.SERVER_IP_PORT+"/auth/facebook";
+
+            URL url = new URL(apiURL);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            Log.i("login", "연결!?!?!?!");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestMethod("POST");
+
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setUseCaches(false);
+            con.setDefaultUseCaches(false);
+
+            Log.i("login", "연결직전");
+            con.connect();
+
+            Log.i("login", "연결!");
+            JSONObject data = new JSONObject();
+
+                data.accumulate("id",id);
+                data.accumulate("name",name);
+                Log.i("ididididid!!!!", id);
+                Log.i("namenamename!!!!!", name);
+            json = data.toString();
+            Log.i("JSONdata", json);
+
+            OutputStream wr = con.getOutputStream();
+
+            wr.write(json.getBytes("utf-8"));
+            wr.flush();
+            wr.close();
+
+            Map<String, List<String>> headerFields = con.getHeaderFields();
+            List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+
+            if(cookiesHeader != null) {
+                for (String cookie : cookiesHeader) {
+                    String cookieName = HttpCookie.parse(cookie).get(0).getName();
+                    String cookieValue = HttpCookie.parse(cookie).get(0).getValue();
+
+                    cookieString = cookieName + "=" + cookieValue;
+
+                    CookieManager.getInstance().setCookie(MainActivity.SERVER_IP_PORT, cookieString);
+
+                }
+            }
+            Log.i("login", "쓰기성공!");
+
+            int responseCode = con.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
+                Log.i("login", "정상");
+            } else {
+                Log.i("login", "에러!");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
     public void gbtnclick(View v) {
         Log.i("server request", "google");

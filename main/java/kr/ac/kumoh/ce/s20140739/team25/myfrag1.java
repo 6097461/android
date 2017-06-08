@@ -78,7 +78,7 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(getActivity())));
         back task = new back();
-        task.execute("http://192.168.0.58:3003/home/list");
+        task.execute(MainActivity.SERVER_IP_PORT+"/home/list");
         return rootView;
     }
 
@@ -213,7 +213,7 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
             }
             holder.txRoom.setText(getItem(position).getName());
             holder.txLoc.setText(getItem(position).getLoc());
-            holder.imimage.setImageUrl("http://192.168.0.58:3003/" + getItem(position).getImage(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }

@@ -86,7 +86,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
             }
         });
        back task = new back();
-        task.execute("http://192.168.0.58:3003/host/info");
+        task.execute(MainActivity.SERVER_IP_PORT+"/host/info");
         return rootView;
     }
     private class back extends AsyncTask<String, Integer, String> {
@@ -243,7 +243,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
             }
             holder.txRoom.setText(getItem(position).getName());
             holder.txLoc.setText(getItem(position).getLoc());
-            holder.imimage.setImageUrl("http://192.168.0.58:3003/" + getItem(position).getImage(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }
@@ -253,8 +253,8 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
         String img=mAdapter.getItem(pos).getImage();
         Intent intent=new Intent(getActivity(),myfrag4_2.class);
         intent.putExtra("id",id);
-        intent.putExtra("img",img);
         startActivity(intent);
+
     }
     public class rpeopleinfo {
 

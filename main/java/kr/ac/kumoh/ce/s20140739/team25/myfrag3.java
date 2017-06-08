@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +60,7 @@ public class myfrag3 extends Fragment {
     TextView name;
     TextView phone;
     TextView email;
-
+   Button logout;
 
     String result="";
     int value;
@@ -65,10 +68,21 @@ public class myfrag3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my3, container, false);
+        logout=(Button)rootView.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logoutRequest logoutrequest = new logoutRequest();
+                logoutrequest.execute(MainActivity.SERVER_IP_PORT+"/auth/logout");
+
+
+            }
+        });
         rArray = new ArrayList<reservinfo>();
         mAdapter = new reservAdapter(getActivity(), R.layout.listitem3, rArray);
         mList = (ListView) rootView.findViewById(R.id.reservlist);
         mList.setAdapter(mAdapter);
+
         Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024);
         Network network = new BasicNetwork(new HurlStack());
         mQueue = new RequestQueue(cache, network);
@@ -76,15 +90,42 @@ public class myfrag3 extends Fragment {
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(getActivity())));
         name=(TextView)rootView.findViewById(R.id.name);
         phone=(TextView)rootView.findViewById(R.id.phone);
-        email=(TextView)rootView.findViewById(R.id.email);
+
         back task = new back();
-        task.execute("http://192.168.0.58:3003/my/info");
+        task.execute(MainActivity.SERVER_IP_PORT+"/my/info");
 
         return rootView;
     }
+
     public void goLogin(){
         Intent intent = new Intent(getActivity(), login.class);
         startActivity(intent);
+    }
+
+    private class logoutRequest extends AsyncTask<String, Integer, String> {
+        @Override
+        public String doInBackground(String... urls) {
+            Log.i("task", "실행?");
+
+            try {
+                URL url = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Cookie", login.cookieString);
+                conn.setDoInput(true);
+
+                Log.i("Logout", "연결?");
+                conn.connect();
+                Log.i("Logout", "연결!");
+
+                InputStream inputStream = conn.getInputStream();
+                Log.i("Logout", "받아옴!");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     private class back extends AsyncTask<String, Integer, String> {
@@ -256,7 +297,7 @@ public class myfrag3 extends Fragment {
             holder.txdate.setText(getItem(position).getDate());
             holder.txtime.setText(getItem(position).getTime());
             holder.txpeople.setText(getItem(position).getPeople());
-            holder.imimage.setImageUrl("http://192.168.0.58:3003/" + getItem(position).getImage(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }

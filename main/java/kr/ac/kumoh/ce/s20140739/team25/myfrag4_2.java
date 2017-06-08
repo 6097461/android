@@ -48,21 +48,24 @@ import java.util.List;
 public class myfrag4_2 extends Activity  {
     Button sbtn;
     String result = "";
-    protected ArrayList<myfrag4_2.sroominfo> rArray = new ArrayList<myfrag4_2.sroominfo>();
+    protected ArrayList<sroominfo> rArray = new ArrayList<myfrag4_2.sroominfo>();
 
+    String id ="";
 
     protected JSONObject mResult = null;
     protected ListView mList;
-    protected myfrag4_2.sroomAdapter mAdapter;
+    protected sroomAdapter mAdapter;
     protected RequestQueue mQueue = null;
     protected ImageLoader mImageLoader = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myfrag4_2);
+        Intent intent = getIntent();
+      id=intent.getStringExtra("id");
         sbtn=(Button)findViewById(R.id.SRR);
-        rArray = new ArrayList<myfrag4_2.sroominfo>();
-        mAdapter = new myfrag4_2.sroomAdapter(this, R.layout.listitem2, rArray);
+        rArray = new ArrayList<sroominfo>();
+        mAdapter = new sroomAdapter(this, R.layout.listitem2, rArray);
         mList = (ListView)findViewById(R.id.SR_list);
         mList.setAdapter(mAdapter);
 
@@ -71,8 +74,8 @@ public class myfrag4_2 extends Activity  {
         mQueue = new RequestQueue(cache, network);
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
-        myfrag4_2.back task = new myfrag4_2.back();
-        task.execute("http://192.168.0.58:3003/host/info");
+        back task = new back();
+        task.execute(MainActivity.SERVER_IP_PORT+"/host/info/"+id);
 
     }
     private class back extends AsyncTask<String, Integer, String> {
@@ -108,20 +111,21 @@ public class myfrag4_2 extends Activity  {
         protected void onPostExecute(String str) {
             try {
                 JSONObject jsResult = new JSONObject(str);
-                JSONArray jsonMainNode=jsResult.getJSONArray("list");
+                JSONArray jsonMainNode=jsResult.getJSONArray("rooms");
                 for(int i=0 ;i<jsonMainNode.length();i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                    String adid=jsonChildNode.getString("adminId");
-                    Log.i("adminid", adid);
                     String id=jsonChildNode.getString("id");
                     Log.i("id", id);
-                    String rname = jsonChildNode.getString("name");
-                    Log.i("rname", rname);
-                    String loc = jsonChildNode.getString("address");
-                    Log.i("loc", loc);
-                    String image = jsonChildNode.getString("img");
-                    Log.i("image", image);
-                    rArray.add(new myfrag4_2.sroominfo(adid,id,rname, loc,image));
+                    String name=jsonChildNode.getString("name");
+                    Log.i("rname", name);
+                    String people=jsonChildNode.getString("max");
+                    String img = jsonChildNode.getString("img");
+                    Log.i("image", img);
+                    String description = jsonChildNode.getString("description");
+                    Log.i("description", description);
+                    String ip = jsonChildNode.getString("ip");
+                    Log.i("ip", ip);
+                    rArray.add(new sroominfo(id,name,img,people,description,ip));
                 }
                 mAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
@@ -142,59 +146,61 @@ public class myfrag4_2 extends Activity  {
 
     public class sroominfo {
 
-        String ip;
-        String sname;
+        String id;
         String people;
-        String desc;
+        String name;
+        String description;
+        String ip;
         String image;
 
-        public sroominfo( String ip,String sname,String people,String desc,String image) {
+        public sroominfo( String id,String name,String img,String people,String desc,String ip) {
 
-            this.ip=ip;
-            this.sname=sname;
+            this.id=id;
+            this.name=name;
+            this.description=desc;
             this.people=people;
-            this.desc=desc;
-            this.image=image;
+            this.ip=ip;
+            this.image=img;
         }
 
-        public String getIp() {
-            return ip;
+        public String getId() {
+            return id;
         }
-        public String getSname() {
-            return sname;
+        public String getName() {
+            return name;
         }
-        public String getPeople() {
-            return people;
+        public String getDescription() {
+            return description;
         }
-        public String getDesc() {
-            return desc;
-        }
+
+        public String getPeople(){return people;}
          public String getImage() {
             return image;
         }
     }
 
     static class sRoomViewHolder {
-        TextView txsroom;
+        TextView txroom;
         TextView txpeople;
+
         TextView txdesc;
         NetworkImageView imimage;
     }
 
-    public class sroomAdapter extends ArrayAdapter<myfrag4_2.sroominfo> {
+    public class sroomAdapter extends ArrayAdapter<sroominfo> {
 
-        public sroomAdapter(Context context, int resource, List<myfrag4_2.sroominfo> objects) {
+        public sroomAdapter(Context context, int resource, List<sroominfo> objects) {
             super(context, resource, objects);
         }
 
         @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            myfrag4_2.sRoomViewHolder holder;
+            sRoomViewHolder holder;
             if (convertView == null) {
                 convertView = myfrag4_2.this.getLayoutInflater().inflate(R.layout.listitem2, parent, false);
-                holder = new myfrag4_2.sRoomViewHolder();
-                holder.txsroom = (TextView) convertView.findViewById(R.id.sname);
+                holder = new sRoomViewHolder();
+                holder.txroom = (TextView) convertView.findViewById(R.id.sname);
                 holder.txpeople = (TextView) convertView.findViewById(R.id.max);
                 holder.txdesc = (TextView) convertView.findViewById(R.id.etc);
 
@@ -202,18 +208,19 @@ public class myfrag4_2 extends Activity  {
                 convertView.setTag(holder);
 
             } else {
-                holder = (myfrag4_2.sRoomViewHolder) convertView.getTag();
+                holder = (sRoomViewHolder) convertView.getTag();
             }
-            holder.txsroom.setText(getItem(position).getSname());
+            holder.txroom.setText(getItem(position).getName());
             holder.txpeople.setText(getItem(position).getPeople());
-            holder.txdesc.setText(getItem(position).getDesc());
-            holder.imimage.setImageUrl("http://192.168.0.58:3003/" + getItem(position).getImage(), mImageLoader);
+            holder.txdesc.setText(getItem(position).getDescription());
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }
 
    public void SRRclick(View v){
        Intent intent = new Intent(myfrag4_2.this, myfrag4_3.class);
+       intent.putExtra("id",id);
        startActivity(intent);
    }
     public void finishregister(View v){

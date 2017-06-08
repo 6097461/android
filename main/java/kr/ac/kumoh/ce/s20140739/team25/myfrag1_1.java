@@ -186,11 +186,13 @@ public class myfrag1_1 extends Activity {
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
         myfrag1_1.back task = new myfrag1_1.back();
-        task.execute("http://192.168.0.58:3003/home/info/" + id);
+        task.execute(MainActivity.SERVER_IP_PORT+"/home/info/" + id);
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String id = mAdapter.getItem(i).getId();
                 Intent intent = new Intent(myfrag1_1.this, myfrag1_2.class);
+                intent.putExtra("id",id);
                 startActivity(intent);
             }
         });
@@ -659,7 +661,7 @@ public class myfrag1_1 extends Activity {
                 String name = studyroom.getString("name");
                 String address = studyroom.getString("address");
                 NetworkImageView immg = (NetworkImageView) findViewById(R.id.room);
-                immg.setImageUrl("http://192.168.0.58:3003/" + img, mImageLoader);
+                immg.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + img, mImageLoader);
                 TextView nname = (TextView) findViewById(R.id.rname);
                 nname.setText(name);
                 TextView adr = (TextView) findViewById(R.id.address);
@@ -773,7 +775,7 @@ public class myfrag1_1 extends Activity {
             holder.txsroom.setText(getItem(position).getSroom());
             holder.txmax.setText(getItem(position).getMax());
             holder.txetc.setText(getItem(position).getEtc());
-            holder.imimage.setImageUrl("http://192.168.0.58:3003/" + getItem(position).getImg(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImg(), mImageLoader);
             return convertView;
         }
     }

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 
 public class myfrag4_3 extends Activity {
@@ -34,12 +35,16 @@ public class myfrag4_3 extends Activity {
     Button btn;
     String name_Str, pickpath;
     Uri uri;
+    String id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.myfrag4_3);
+        Intent intent=getIntent();
+        id=intent.getStringExtra("id");
+        Log.i("아이디가왜안뜨나고오오오",id);
         e1 = (EditText) findViewById(R.id.sname);
         e2 = (EditText) findViewById(R.id.people);
         e3 = (EditText) findViewById(R.id.etc);
@@ -87,10 +92,16 @@ public class myfrag4_3 extends Activity {
 
             //text 전송
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"name\"\r\n\r\n" + e1.getText().toString());
+            dos.writeBytes("Content-Disposition: form-data; name=\"name\"\r\n\r\n" + URLEncoder.encode(e1.getText().toString(), "utf-8"));
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"address\"\r\n\r\n" + e2.getText().toString());
+            dos.writeBytes("Content-Disposition: form-data; name=\"max\"\r\n\r\n" + URLEncoder.encode(e2.getText().toString(), "utf-8"));
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"description\"\r\n\r\n" + URLEncoder.encode(e3.getText().toString(), "utf-8"));
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"ip\"\r\n\r\n" + URLEncoder.encode(e4.getText().toString(), "utf-8"));
             dos.writeBytes(lineEnd);
 
             Log.i("죽을랑가!!!!!", "!! !!!");
@@ -216,12 +227,13 @@ public class myfrag4_3 extends Activity {
     View.OnClickListener myClickListner = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            HttpAsyncTask httpTask = new HttpAsyncTask();
+            httpTask.execute(MainActivity.SERVER_IP_PORT+"/host/add/"+id);
             Intent intent=new Intent(myfrag4_3.this,myfrag4_2.class);
+            intent.putExtra("id",id);
             startActivity(intent);
-            //or finish();
-//            HttpAsyncTask httpTask = new HttpAsyncTask();
-//            httpTask.execute("http://192.168.0.58:3003/host/insert");
-//            finish();
+
         }
     };
 
