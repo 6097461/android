@@ -40,21 +40,14 @@ public class myfrag4_1 extends Activity {
     String name_Str, pickpath;
     Uri uri;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.myfrag4_1);
         e1 = (EditText) findViewById(R.id.name);
         adr= (EditText) findViewById(R.id.adr);
 
     }
-
-
-
-
 
     public void imgclick(View v) {
         doTakeAlbumAction();
@@ -229,9 +222,12 @@ public class myfrag4_1 extends Activity {
     }
     public void register1(View v){
 
-            HttpAsyncTask httpTask = new HttpAsyncTask();
-            httpTask.execute(MainActivity.SERVER_IP_PORT+"/host/add");
-        finish();
+        HttpAsyncTask httpTask = new HttpAsyncTask();
+        httpTask.execute(MainActivity.SERVER_IP_PORT+"/host/add");
+
+
+        Intent intent=new Intent(myfrag4_1.this,MainActivity.class);
+        startActivity(intent);
 
     }
 }

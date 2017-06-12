@@ -27,6 +27,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,8 +75,9 @@ public class myfrag3 extends Fragment {
             public void onClick(View view) {
                 logoutRequest logoutrequest = new logoutRequest();
                 logoutrequest.execute(MainActivity.SERVER_IP_PORT+"/auth/logout");
-
-
+                LoginManager.getInstance().logOut();
+                Intent intent=new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
             }
         });
         rArray = new ArrayList<reservinfo>();

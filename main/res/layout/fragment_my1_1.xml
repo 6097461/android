@@ -1,61 +1,52 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-   <com.android.volley.toolbox.NetworkImageView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:id="@+id/room"
-       android:adjustViewBounds="true"
-       />
-        <LinearLayout
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rname"
-        android:textColor="#000"
-        android:textSize="30dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="("
-                android:textColor="#000"
-                android:textSize="30dp"/>
+            android:adjustViewBounds="true" />
+
         <TextView
+            android:id="@+id/rname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="30dp" />
+
+        <TextView
             android:id="@+id/address"
-            android:textSize="20dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=")"
-                android:textColor="#000"
-                android:textSize="30dp"/>
-        </LinearLayout>
-
-            <ListView
-                android:id="@+id/listview2"
-                android:layout_width="match_parent"
-                android:layout_height="400dp">
-            </ListView>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp" />
 
 
-            <com.nhn.android.maps.NMapView
+        <ListView
+            android:id="@+id/listview2"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+        </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.nhn.android.maps.NMapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:orientation="vertical"/>
-
+            android:layout_height="250dp"
+            android:orientation="vertical" />
+    </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

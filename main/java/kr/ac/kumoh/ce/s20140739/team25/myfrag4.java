@@ -48,7 +48,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
 
     protected ArrayList<roominfo> rArray = new ArrayList<roominfo>();
     protected ArrayList<rpeopleinfo> rpArray = new ArrayList<rpeopleinfo>();
-    String result="";
+    String result = "";
 
 
     protected ListView mList;
@@ -57,13 +57,14 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
     protected ImageLoader mImageLoader = null;
     protected ListView rList;
     protected rpAdapter rAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       // return super.onCreateView(inflater, container, savedInstanceState);
+        // return super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_my4, container, false);
         rArray = new ArrayList<roominfo>();
-        rpArray=new ArrayList<rpeopleinfo>();
+        rpArray = new ArrayList<rpeopleinfo>();
         mAdapter = new registerAdapter(getActivity(), R.layout.listitem1, rArray);
         rAdapter = new rpAdapter(getActivity(), R.layout.listitem4, rpArray);
         Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024);
@@ -74,8 +75,10 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
         mList = (ListView) rootView.findViewById(R.id.R_list);
         mList.setAdapter(mAdapter);
         mList.setOnItemClickListener(this);
+
         rList = (ListView) rootView.findViewById(R.id.RP_list);
         rList.setAdapter(rAdapter);
+        rList.setOnItemClickListener(this);
 
 
         Button loginbtn = (Button) rootView.findViewById(R.id.RR);
@@ -85,67 +88,70 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
                 startActivity(intent);
             }
         });
-       back task = new back();
-        task.execute(MainActivity.SERVER_IP_PORT+"/host/info");
+        back task = new back();
+        task.execute(MainActivity.SERVER_IP_PORT + "/host/info");
         return rootView;
     }
+
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
             Log.i("task", "실행?");
 
-            try{
+            try {
                 URL myFileUrl = new URL(urls[0]);
-                HttpURLConnection conn = (HttpURLConnection)myFileUrl.openConnection();
+                HttpURLConnection conn = (HttpURLConnection) myFileUrl.openConnection();
                 conn.setRequestMethod("GET");
-                if(login.cookieString != "")
+                if (login.cookieString != "")
                     conn.setRequestProperty("Cookie", login.cookieString);
                 conn.setDoInput(true);
 
                 Log.i("task", "연결?");
                 conn.connect();
                 Log.i("task", "연결!");
-                if(conn.getResponseCode() == 404){
+                if (conn.getResponseCode() == 404) {
                     return null;
                 }
                 Log.i("task", "비트맵?");
-                Log.i("responce code",""+conn.getResponseCode());
+                Log.i("responce code", "" + conn.getResponseCode());
 
                 InputStream inputStream = conn.getInputStream();
 
-                if(inputStream != null)
+                if (inputStream != null)
                     result = convertInputStreamToString(inputStream);
                 else
                     result = "Did not work!";
 
-            }catch(IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return result;
         }
+
         @Override
         protected void onPostExecute(String str) {
-            if(str == null) return;
+            if (str == null) return;
             try {
                 JSONObject jsResult = new JSONObject(str);
                 JSONArray studylist = jsResult.getJSONArray("studyrooms");
                 JSONArray rpeoplelist = jsResult.getJSONArray("reservations");
 
 
-                for(int i=0; i < studylist.length(); i++) {
+                for (int i = 0; i < studylist.length(); i++) {
                     JSONObject jsonObject = studylist.getJSONObject(i);
-                    String id=jsonObject.getString("id");
-                    String img= jsonObject.getString("img");
+                    String id = jsonObject.getString("id");
+                    String img = jsonObject.getString("img");
                     String name = jsonObject.getString("name");
                     String address = jsonObject.getString("address");
 
-                    rArray.add(new roominfo(id,img,name,address));
+                    rArray.add(new roominfo(id, img, name, address));
 
                 }
-                for(int i=0; i < rpeoplelist.length(); i++) {
+                for (int i = 0; i < rpeoplelist.length(); i++) {
                     JSONObject jsonObject = rpeoplelist.getJSONObject(i);
-                    String id=jsonObject.getString("id");
-                    String user= jsonObject.getString("user");
+                    String id = jsonObject.getString("id");
+                    Log.i("레저베이션 id", id);
+                    String user = jsonObject.getString("user");
                     String rname = jsonObject.getString("studyroom");
                     String sname = jsonObject.getString("room");
                     String address = jsonObject.getString("address");
@@ -153,33 +159,29 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
                     String time = jsonObject.getString("time");
                     String people = jsonObject.getString("number");
 
-                    rpArray.add(new rpeopleinfo(user,rname,sname,address,date,time,people));
-
-
+                    rpArray.add(new rpeopleinfo(id, user, rname, sname, address, date, time, people));
                 }
-                Log.i("post끗", "끝");
-
                 mAdapter.notifyDataSetChanged();
                 rAdapter.notifyDataSetChanged();
-                Log.i("post끗", "진짜끝");
 
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 Toast.makeText(getActivity(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
                 Log.i("EEEEEEEEEEEEE", e.toString());
             }
         }
-        private String convertInputStreamToString(InputStream inputStream) throws IOException{
+
+        private String convertInputStreamToString(InputStream inputStream) throws IOException {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line = "";
             String result = "";
-            while((line = bufferedReader.readLine()) != null)
+            while ((line = bufferedReader.readLine()) != null)
                 result += line;
             inputStream.close();
             Log.i("실행", "완료");
             return result;
         }
     }
+
     public class roominfo {
 
         String id;
@@ -195,7 +197,6 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
             this.loc = address;
 
         }
-
 
         public String getId() {
             return id;
@@ -221,7 +222,6 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
     }
 
     public class registerAdapter extends ArrayAdapter<roominfo> {
-
         public registerAdapter(Context context, int resource, List<roominfo> objects) {
             super(context, resource, objects);
         }
@@ -243,21 +243,29 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
             }
             holder.txRoom.setText(getItem(position).getName());
             holder.txLoc.setText(getItem(position).getLoc());
-            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT + "/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-        String id = mAdapter.getItem(pos).getId();
-        String img=mAdapter.getItem(pos).getImage();
-        Intent intent=new Intent(getActivity(),myfrag4_2.class);
-        intent.putExtra("id",id);
-        startActivity(intent);
-
+        if (adapterView.equals(mList)) {
+            String id = mAdapter.getItem(pos).getId();
+            String img = mAdapter.getItem(pos).getImage();
+            Intent intent = new Intent(getActivity(), myfrag4_2.class);
+            intent.putExtra("id", id);
+            startActivity(intent);
+        } else if (adapterView.equals(rList)) {
+            Intent intent = new Intent(getActivity(), img.class);
+            String id = rAdapter.getItem(pos).getId();
+            intent.putExtra("id", id);
+            startActivity(intent);
+        }
     }
-    public class rpeopleinfo {
 
+    public class rpeopleinfo {
+        String id;
         String user;
         String rname;
         String sname;
@@ -265,23 +273,49 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
         String date;
         String time;
         String people;
-        public rpeopleinfo(String user, String rname,String sname, String address, String date,String time, String people) {
-            this.user=user;
-            this.rname=rname;
-            this.sname=sname;
-            this.address=address;
-            this.date=date;
-            this.time=time;
-            this.people=people;
 
+        public rpeopleinfo(String id, String user, String rname, String sname, String address, String date, String time, String people) {
+            this.id = id;
+            this.user = user;
+            this.rname = rname;
+            this.sname = sname;
+            this.address = address;
+            this.date = date;
+            this.time = time;
+            this.people = people;
         }
-        public String getUser(){return user;}
-        public String getRname(){return rname;}
-        public String getSname(){return sname;}
-        public String getAddress(){return address;}
-        public String getDate(){return date;}
-        public String getTime(){return time;}
-        public String getPeople(){return people;}
+
+        public String getId() {
+            return id;
+        }
+
+        public String getUser() {
+            return user;
+        }
+
+        public String getRname() {
+            return rname;
+        }
+
+        public String getSname() {
+            return sname;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public String getPeople() {
+            return people;
+        }
     }
 
     static class RegisterViewHolder {
@@ -292,7 +326,6 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
         TextView txdate;
         TextView txtime;
         TextView txpeople;
-
     }
 
     public class rpAdapter extends ArrayAdapter<rpeopleinfo> {
@@ -314,7 +347,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
                 holder.txaddr = (TextView) convertView.findViewById(R.id.address);
                 holder.txdate = (TextView) convertView.findViewById(R.id.date);
                 holder.txtime = (TextView) convertView.findViewById(R.id.time);
-                holder.txpeople=(TextView) convertView.findViewById(R.id.people);
+                holder.txpeople = (TextView) convertView.findViewById(R.id.people);
 
                 convertView.setTag(holder);
 
@@ -328,7 +361,6 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
             holder.txdate.setText(getItem(position).getDate());
             holder.txtime.setText(getItem(position).getTime());
             holder.txpeople.setText(getItem(position).getPeople());
-
 
             return convertView;
         }

@@ -97,7 +97,8 @@ public class login extends Activity {
                             login_i = FACEBOOK_LOGIN;
                             facebookloginDB logindb = new facebookloginDB();
                             logindb.execute();
-                            finish();
+                            Intent intent =new Intent(login.this,MainActivity.class);
+                            startActivity(intent);
                         }
                         catch (Exception e) {
 
@@ -110,7 +111,6 @@ public class login extends Activity {
                 parameters.putString("fields", "id,name,email,gender,birthday");
                 graphRequest.setParameters(parameters);
                 graphRequest.executeAsync();
-                finish();
             }
 
             @Override
@@ -145,7 +145,8 @@ public class login extends Activity {
                 login_i = NAVER_LOGIN;
                 naverloginDB logindb = new naverloginDB();
                 logindb.execute();
-                finish();
+                Intent intent =new Intent(login.this,MainActivity.class);
+                startActivity(intent);
 
             } else {
                 String errorCode = mOAuthLoginModule.getLastErrorCode(mContext).getCode();
@@ -265,10 +266,10 @@ public class login extends Activity {
             Log.i("login", "연결!");
             JSONObject data = new JSONObject();
 
-                data.accumulate("id",id);
-                data.accumulate("name",name);
-                Log.i("ididididid!!!!", id);
-                Log.i("namenamename!!!!!", name);
+            data.accumulate("id", id);
+            data.accumulate("name", name);
+            Log.i("ididididid!!!!", id);
+            Log.i("namenamename!!!!!", name);
             json = data.toString();
             Log.i("JSONdata", json);
 

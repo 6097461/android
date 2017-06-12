@@ -1,5 +1,4 @@
 package kr.ac.kumoh.ce.s20140739.team25;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +71,8 @@ import java.util.List;
 
 public class myfrag1_1 extends Activity {
 
+    String x = "126.978371";
+    String y = "37.5666091";
     String result = "";
     protected ArrayList<myfrag1_1.sroominfo> rArray = new ArrayList<myfrag1_1.sroominfo>();
 
@@ -119,6 +121,7 @@ public class myfrag1_1 extends Activity {
     private MapContainerView mMapContainerView;
     private NMapContext a;
 
+    ScrollView sv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,12 +129,19 @@ public class myfrag1_1 extends Activity {
         //map=(ImageView)findViewById(R.id.map);
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
-        String img = intent.getStringExtra("img");
+//        String img = intent.getStringExtra("img");
         rArray = new ArrayList<myfrag1_1.sroominfo>();
         mAdapter = new myfrag1_1.sroomAdapter(this, R.layout.listitem2, rArray);
+        sv = (ScrollView)findViewById(R.id.all);
         mList = (ListView) findViewById(R.id.listview2);
         mList.setAdapter(mAdapter);
-
+        mList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                sv.requestDisallowInterceptTouchEvent(true);
+                return false;
+        }
+        });
         mMapContext =  new NMapContext(super.getBaseContext());
         mMapContext.onCreate();
 
@@ -180,6 +190,7 @@ public class myfrag1_1 extends Activity {
 
         mMyLocationOverlay = mOverlayManager.createMyLocationOverlay(mMapLocationManager, mMapCompassManager);
 
+
         Cache cache = new DiskBasedCache(this.getCacheDir(), 1024 * 1024);
         Network network = new BasicNetwork(new HurlStack());
         mQueue = new RequestQueue(cache, network);
@@ -190,14 +201,26 @@ public class myfrag1_1 extends Activity {
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String id = mAdapter.getItem(i).getId();
-                Intent intent = new Intent(myfrag1_1.this, myfrag1_2.class);
-                intent.putExtra("id",id);
-                startActivity(intent);
+
+                if(login.cookieString == ""){
+                    goLogin();
+                }
+                else {
+                    String id = mAdapter.getItem(i).getId();
+                    Intent intent = new Intent(myfrag1_1.this, myfrag1_2.class);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+
             }
         });
 
 
+    }
+
+    public void goLogin(){
+        Intent intent = new Intent(getApplicationContext(), login.class);
+        startActivity(intent);
     }
 
     @Override
@@ -233,6 +256,20 @@ public class myfrag1_1 extends Activity {
     public void onDestroy() {
         mMapContext.onDestroy();
         super.onDestroy();
+    }
+
+      private void POIdataOverlay(String name) {
+        mOverlayManager.clearOverlays();
+        int markerId = NMapPOIflagType.PIN;
+
+        NMapPOIdata poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
+        poiData.beginPOIdata(1);
+        poiData.addPOIitem(Double.parseDouble(x), Double.parseDouble(y), name, markerId, 0);
+        poiData.endPOIdata();
+
+        NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+        poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
+        poiDataOverlay.selectPOIitem(0, true);
     }
 
     private void restoreInstanceState() {
@@ -387,8 +424,8 @@ public class myfrag1_1 extends Activity {
 
             if (errorInfo == null) { // success
                 // restore map view state such as map center position and zoom level.
-                //restoreInstanceState();
-                startMyLocation();
+                restoreInstanceState();
+               // startMyLocation();
             } else { // fail
                 Log.e(LOG_TAG, "onFailedToInitializeWithError: " + errorInfo.toString());
 
@@ -482,7 +519,7 @@ public class myfrag1_1 extends Activity {
             }
 
             // [[TEMP]] handle a click event of the callout
-            Toast.makeText(myfrag1_1.this, "여기바꾸면됩니다: " + item.getTitle(), Toast.LENGTH_LONG).show();
+            Toast.makeText(myfrag1_1.this, "" + item.getTitle(), Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -654,11 +691,12 @@ public class myfrag1_1 extends Activity {
 
         @Override
         protected void onPostExecute(String str) {
+            String name = "";
             try {
                 JSONObject jsResult = new JSONObject(str);
                 JSONObject studyroom = jsResult.getJSONObject("studyroom");
                 String img = studyroom.getString("img");
-                String name = studyroom.getString("name");
+                name = studyroom.getString("name");
                 String address = studyroom.getString("address");
                 NetworkImageView immg = (NetworkImageView) findViewById(R.id.room);
                 immg.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + img, mImageLoader);
@@ -666,6 +704,10 @@ public class myfrag1_1 extends Activity {
                 nname.setText(name);
                 TextView adr = (TextView) findViewById(R.id.address);
                 adr.setText(address);
+                JSONObject point = jsResult.getJSONObject("point");
+                x = point.getString("x");
+                y = point.getString("y");
+
                 JSONArray jsonMainNode = jsResult.getJSONArray("rooms");
                 for (int i = 0; i < jsonMainNode.length(); i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
@@ -683,6 +725,7 @@ public class myfrag1_1 extends Activity {
             } catch (JSONException e) {
                 Toast.makeText(myfrag1_1.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
             }
+            POIdataOverlay(name);
         }
 
         private String convertInputStreamToString(InputStream inputStream) throws IOException {
@@ -692,7 +735,6 @@ public class myfrag1_1 extends Activity {
             while ((line = bufferedReader.readLine()) != null)
                 result += line;
             inputStream.close();
-            Log.i("실행", "완료");
             return result;
         }
     }
@@ -780,5 +822,3 @@ public class myfrag1_1 extends Activity {
         }
     }
 }
-
-

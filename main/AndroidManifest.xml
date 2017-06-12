@@ -44,6 +44,7 @@
 
 
         <activity android:name=".myfrag1_1" />
+        <activity android:name=".img" />
         <activity android:name=".myfrag1_2" />
         <activity android:name=".login" />
         <activity android:name=".myfrag4_1" />

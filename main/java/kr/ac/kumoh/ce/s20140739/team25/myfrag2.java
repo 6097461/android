@@ -1,7 +1,5 @@
 package kr.ac.kumoh.ce.s20140739.team25;
 
-
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,7 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -59,15 +56,13 @@ public class myfrag2 extends Fragment {
         Time=(TextView)rootView.findViewById(R.id.time);
         Address=(TextView)rootView.findViewById(R.id.address);
         Date=(TextView)rootView.findViewById(R.id.date);
+
         keyinfoGetRequest keyinfogetrequest = new keyinfoGetRequest();
         keyinfogetrequest.execute(MainActivity.SERVER_IP_PORT+"/key/info");
-
 
         Camerabtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 doTakePhotoAction();
-                keyCameraPostRequest keycamerapostrequest = new keyCameraPostRequest();
-                keycamerapostrequest.execute(MainActivity.SERVER_IP_PORT + "/key/camera");
             }
         });
 
@@ -75,6 +70,8 @@ public class myfrag2 extends Fragment {
             public void onClick(View v) {
                 keyGetRequest keygetrequest = new keyGetRequest();
                 keygetrequest.execute(MainActivity.SERVER_IP_PORT + "/key/return");
+                Intent intent=new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -88,7 +85,7 @@ public class myfrag2 extends Fragment {
         Lockbtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 keyGetRequest keygetrequest = new keyGetRequest();
-                keygetrequest.execute(MainActivity.SERVER_IP_PORT + "key/lock");
+                keygetrequest.execute(MainActivity.SERVER_IP_PORT + "/key/lock");
             }
         });
 
@@ -97,8 +94,8 @@ public class myfrag2 extends Fragment {
 
     public void doTakePhotoAction() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        String url="tmp_"+String.valueOf(System.currentTimeMillis())+".jpg";
-        mImageCaptureUri=Uri.fromFile(new File(Environment.getExternalStorageDirectory(),url));
+        String url="Team25/tmp_"+String.valueOf(System.currentTimeMillis())+".jpg";
+        mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),url));
         Log.i("사진파일",""+mImageCaptureUri);
         intent.putExtra(MediaStore.EXTRA_OUTPUT,mImageCaptureUri);
         startActivityForResult(intent,PICK_FROM_CAMERA);
@@ -125,8 +122,8 @@ public class myfrag2 extends Fragment {
                 if(resultCode!=RESULT_OK){
                     return;
                 }
-                final Bundle extras=data.getExtras();
-                String filePath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/Team25/"+System.currentTimeMillis()+".jpg";
+                final Bundle extras = data.getExtras();
+                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Team25/"+System.currentTimeMillis()+".jpg";
 
                 if(extras != null) {
                     Bitmap photo = extras.getParcelable("data");
@@ -141,20 +138,27 @@ public class myfrag2 extends Fragment {
                 }
             }
         }
+
+        keyCameraPostRequest keycamerapostrequest = new keyCameraPostRequest();
+        keycamerapostrequest.execute(MainActivity.SERVER_IP_PORT + "/key/camera");
     }
+
     private void storeCropImage(Bitmap bitmap,String filePath){
-        String dirPath=Environment.getExternalStorageDirectory().getAbsolutePath()+"/Team25";
-        File directory_team25=new File(dirPath);
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Team25";
+        File directory_team25 = new File(dirPath);
+
         if(!directory_team25.exists())
             directory_team25.mkdir();
+
         File copyFile=new File(filePath);
         BufferedOutputStream out=null;
+
         try {
             copyFile.createNewFile();
             out = new BufferedOutputStream(new FileOutputStream(copyFile));
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
-          getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(copyFile)));
+            getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(copyFile)));
 
             out.flush();
             out.close();
@@ -162,8 +166,6 @@ public class myfrag2 extends Fragment {
             e.printStackTrace();
         }
     }
-
-
 
     private class keyCameraPostRequest extends AsyncTask<String, Void, String> {
         @Override
@@ -195,8 +197,8 @@ public class myfrag2 extends Fragment {
                 dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + mImageCaptureUri.toString() + "\"" + lineEnd);
                 dos.writeBytes(lineEnd);
 
-                String realpath = mImageCaptureUri.toString();
-                FileInputStream fileInputStream = new FileInputStream(realpath);
+
+                FileInputStream fileInputStream = new FileInputStream(absoultePath);
                 Log.i("우오오오오ㅗ오오오!!!!!", "!! !!!");
                 int bytesAvailable = fileInputStream.available();
                 Log.i("byteAvailble값값값!!!!!", "!!"+ Integer.toString(bytesAvailable)+"!!!");
@@ -244,7 +246,6 @@ public class myfrag2 extends Fragment {
             }
 
             return result;
-
         }
     }
 
@@ -333,11 +334,11 @@ public class myfrag2 extends Fragment {
                 String date=jsonMainNode.getString("date");
                 String time=jsonMainNode.getString("time");
 
-                Room.setText(studyroom);
+                Room.setText(studyroom + " / ");
                 Sroom.setText(sroom);
-                Time.setText(time);
+                Time.setText(time+"시");
                 Address.setText(adr);
-                Date.setText(date);
+                Date.setText(date+" / ");
 
 
             } catch (JSONException e) {

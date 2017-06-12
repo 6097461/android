@@ -4,75 +4,69 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:orientation="vertical"
-
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
-
 
     <TextView
         android:id="@+id/tvUserInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="사용자 정보"
-        android:paddingBottom="5dp"
         android:background="@drawable/back"
+        android:paddingBottom="5dp"
+        android:text="사용자 정보"
         android:textColor="#000"
         android:textSize="25dp" />
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/name"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:textColor="#000"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/phone"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textColor="#000"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#000"
+            android:textSize="20dp" />
+
         <Button
             android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@drawable/backk"
-            android:text="로그아웃"
-            />
-
+            android:text="로그아웃" />
     </LinearLayout>
-
-
-
 
     <TextView
         android:id="@+id/tvUserReservation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="예약"
-        android:paddingBottom="3dp"
         android:background="@drawable/back"
-
+        android:paddingBottom="3dp"
+        android:text="예약"
         android:textColor="#000"
         android:textSize="25dp" />
 
 
-        <ListView
-            android:id="@+id/reservlist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
+    <ListView
+        android:id="@+id/reservlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

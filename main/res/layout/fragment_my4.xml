@@ -2,49 +2,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:orientation="vertical"
-   android:background="#fff"
     tools:context="kr.ac.kumoh.ce.s20140739.team25.MainActivity$PlaceholderFragment">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="등록된 공간"
-    android:paddingBottom="3dp"
-    android:background="@drawable/back"
-    android:textColor="#000"
-    android:textSize="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:paddingBottom="3dp"
+        android:text="등록된 공간"
+        android:textColor="#000"
+        android:textSize="30dp" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="185dp"
+        android:fillViewport="true">
+
         <ListView
             android:id="@+id/R_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
+            android:layout_height="match_parent"></ListView>
     </ScrollView>
 
     <Button
         android:id="@+id/RR"
-        android:background="@drawable/plus"
-        android:layout_gravity="right"
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:background="@drawable/plus" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="예약자 명단"
-        android:paddingBottom="3dp"
         android:background="@drawable/back"
+        android:paddingBottom="3dp"
+        android:text="예약자 명단"
         android:textColor="#000"
-        android:textSize="30dp"/>
+        android:textSize="30dp" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <ListView
             android:id="@+id/RP_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
+            android:layout_height="match_parent"></ListView>
     </ScrollView>
 
 </LinearLayout>

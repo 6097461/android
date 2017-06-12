@@ -1,41 +1,32 @@
 package kr.ac.kumoh.ce.s20140739.team25;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,38 +41,34 @@ import java.util.List;
  * Created by 60974 on 2017-04-04.
  */
 
-public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener {
-
-    String result = "";
-    protected ArrayList<roominfo> rArray = new ArrayList<roominfo>();
-
-
-    protected JSONObject mResult = null;
+public class img extends Activity  {
+    protected ArrayList<imageinfo> rArray = new ArrayList<imageinfo>();
     protected ListView mList;
-    protected roomAdapter mAdapter;
+    protected imageAdapter mAdapter;
     protected RequestQueue mQueue = null;
     protected ImageLoader mImageLoader = null;
+    String result = "";
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_my1, container, false);
-        rArray = new ArrayList<roominfo>();
-        mAdapter = new roomAdapter(getActivity(), R.layout.listitem1, rArray);
-        mList = (ListView) rootView.findViewById(R.id.listview1);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.image);
+        rArray = new ArrayList<imageinfo>();
+        mAdapter = new imageAdapter(this, R.layout.listitem5, rArray);
+        mList = (ListView) findViewById(R.id.checkimage);
         mList.setAdapter(mAdapter);
-        mList.setOnItemClickListener(this);
-        Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024);
+        Cache cache = new DiskBasedCache(this.getCacheDir(), 1024 * 1024);
         Network network = new BasicNetwork(new HurlStack());
         mQueue = new RequestQueue(cache, network);
         mQueue.start();
-        mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(getActivity())));
-        back task = new back();
-        task.execute(MainActivity.SERVER_IP_PORT+"/home/list");
-        return rootView;
-    }
+        mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
 
+        Intent intent = getIntent();
+        String id = intent.getStringExtra("id");
+
+        back task = new back();
+        task.execute(MainActivity.SERVER_IP_PORT+"/host/camera/"+id);
+    }
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
@@ -115,24 +102,16 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
         protected void onPostExecute(String str) {
             try {
                 JSONObject jsResult = new JSONObject(str);
-                JSONArray jsonMainNode=jsResult.getJSONArray("list");
+                JSONArray jsonMainNode=jsResult.getJSONArray("camera");
                 for(int i=0 ;i<jsonMainNode.length();i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                    String adid=jsonChildNode.getString("adminId");
-                    Log.i("adminid", adid);
-                    String id=jsonChildNode.getString("id");
-                    Log.i("id", id);
-                    String rname = jsonChildNode.getString("name");
-                    Log.i("rname", rname);
-                    String loc = jsonChildNode.getString("address");
-                    Log.i("loc", loc);
                     String image = jsonChildNode.getString("img");
                     Log.i("image", image);
-                    rArray.add(new roominfo(adid,id,rname, loc,image));
+                    rArray.add(new imageinfo(image));
                 }
                 mAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
-                Toast.makeText(getActivity(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -146,36 +125,11 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
             return result;
         }
     }
+    public class imageinfo {
+       String image;
 
-    public class roominfo {
-        String adminid;
-        String id;
-        String name;
-        String loc;
-        String image;
-
-        public roominfo(String adid, String id, String name, String loc, String image) {
-            this.adminid = adid;
-            this.id = id;
-            this.name = name;
-            this.loc = loc;
+        public imageinfo(String image) {
             this.image = image;
-        }
-
-        public String getAdminid() {
-            return adminid;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getLoc() {
-            return loc;
         }
 
         public String getImage() {
@@ -183,49 +137,34 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
         }
     }
 
-    static class RoomViewHolder {
-        TextView txRoom;
-        TextView txLoc;
+    static class imageviewholder {
+
         NetworkImageView imimage;
     }
 
-    public class roomAdapter extends ArrayAdapter<roominfo> {
+    public class imageAdapter extends ArrayAdapter<imageinfo> {
 
-        public roomAdapter(Context context, int resource, List<roominfo> objects) {
+        public imageAdapter(Context context, int resource, List<imageinfo> objects) {
             super(context, resource, objects);
         }
 
         @NonNull
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            RoomViewHolder holder;
+            imageviewholder holder;
             if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.listitem1, parent, false);
-                holder = new RoomViewHolder();
-                holder.txRoom = (TextView) convertView.findViewById(R.id.name);
-                holder.txLoc = (TextView) convertView.findViewById(R.id.address);
-                holder.imimage = (NetworkImageView) convertView.findViewById(R.id.studyroomimage);
+                convertView = img.this.getLayoutInflater().inflate(R.layout.listitem5, parent, false);
+                holder = new imageviewholder();
+
+                holder.imimage = (NetworkImageView) convertView.findViewById(R.id.cimage);
                 convertView.setTag(holder);
 
             } else {
-                holder = (RoomViewHolder) convertView.getTag();
+                holder = (imageviewholder) convertView.getTag();
             }
-            holder.txRoom.setText(getItem(position).getName());
-            holder.txLoc.setText(getItem(position).getLoc());
+
             holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-        String id = mAdapter.getItem(pos).getId();
-        String img=mAdapter.getItem(pos).getImage();
-        Intent intent=new Intent(getActivity(),myfrag1_1.class);
-        intent.putExtra("id",id);
-        intent.putExtra("img",img);
-        startActivity(intent);
-    }
-
 }
-

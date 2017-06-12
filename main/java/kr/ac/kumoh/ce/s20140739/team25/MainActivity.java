@@ -1,5 +1,6 @@
 package kr.ac.kumoh.ce.s20140739.team25;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -32,7 +35,12 @@ public class MainActivity extends AppCompatActivity  {
 
     private static Typeface mTypeface=null;
     private ViewPager mViewPager;
-    static String SERVER_IP_PORT = "http://192.168.0.58:3003";
+    static String SERVER_IP_PORT = "http://192.168.0.48:3003";
+    private final long FINISH_INTERVAL_TIME=1500;
+    private long backPressedTime=0;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +67,27 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        long tempTime=System.currentTimeMillis();
+        long intervalTime=tempTime-backPressedTime;
+        if(0<=intervalTime&&FINISH_INTERVAL_TIME>=intervalTime){
+            //super.onBackPressed();
+            Intent t=new Intent(this,MainActivity.class);
+            this.startActivity(t);
+            this.moveTaskToBack(true);
+            this.finish();
+            android.os.Process.killProcess(android.os.Process.myPid());
 
+
+
+        }
+        else{
+            backPressedTime=tempTime;
+            Toast.makeText(getApplicationContext(),"한번 더 누르면 앱이 종료됩니다.",Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
     public static class PlaceholderFragment extends Fragment {
         /**
@@ -144,10 +172,11 @@ public class MainActivity extends AppCompatActivity  {
             }
             return null;
         }
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
+//        @Override
+//        public int getItemPosition(Object object) {
+//
+//            return POSITION_NONE;
+//        }
 
 
     }

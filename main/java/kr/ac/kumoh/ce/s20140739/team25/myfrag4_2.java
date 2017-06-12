@@ -45,28 +45,29 @@ import java.util.List;
  * Created by 60974 on 2017-04-04.
  */
 
-public class myfrag4_2 extends Activity  {
+public class myfrag4_2 extends Activity {
     Button sbtn;
     String result = "";
     protected ArrayList<sroominfo> rArray = new ArrayList<myfrag4_2.sroominfo>();
 
-    String id ="";
+    String id = "";
 
     protected JSONObject mResult = null;
     protected ListView mList;
     protected sroomAdapter mAdapter;
     protected RequestQueue mQueue = null;
     protected ImageLoader mImageLoader = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myfrag4_2);
         Intent intent = getIntent();
-      id=intent.getStringExtra("id");
-        sbtn=(Button)findViewById(R.id.SRR);
+        id = intent.getStringExtra("id");
+        sbtn = (Button) findViewById(R.id.SRR);
         rArray = new ArrayList<sroominfo>();
         mAdapter = new sroomAdapter(this, R.layout.listitem2, rArray);
-        mList = (ListView)findViewById(R.id.SR_list);
+        mList = (ListView) findViewById(R.id.SR_list);
         mList.setAdapter(mAdapter);
 
         Cache cache = new DiskBasedCache(this.getCacheDir(), 1024 * 1024);
@@ -75,9 +76,16 @@ public class myfrag4_2 extends Activity  {
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
         back task = new back();
-        task.execute(MainActivity.SERVER_IP_PORT+"/host/info/"+id);
-
+        task.execute(MainActivity.SERVER_IP_PORT + "/host/info/" + id);
+        Button bt_finish = (Button)findViewById(R.id.finish);
+        bt_finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
+
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
@@ -111,27 +119,28 @@ public class myfrag4_2 extends Activity  {
         protected void onPostExecute(String str) {
             try {
                 JSONObject jsResult = new JSONObject(str);
-                JSONArray jsonMainNode=jsResult.getJSONArray("rooms");
-                for(int i=0 ;i<jsonMainNode.length();i++) {
+                JSONArray jsonMainNode = jsResult.getJSONArray("rooms");
+                for (int i = 0; i < jsonMainNode.length(); i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
-                    String id=jsonChildNode.getString("id");
+                    String id = jsonChildNode.getString("id");
                     Log.i("id", id);
-                    String name=jsonChildNode.getString("name");
+                    String name = jsonChildNode.getString("name");
                     Log.i("rname", name);
-                    String people=jsonChildNode.getString("max");
+                    String people = jsonChildNode.getString("max");
                     String img = jsonChildNode.getString("img");
                     Log.i("image", img);
                     String description = jsonChildNode.getString("description");
                     Log.i("description", description);
                     String ip = jsonChildNode.getString("ip");
                     Log.i("ip", ip);
-                    rArray.add(new sroominfo(id,name,img,people,description,ip));
+                    rArray.add(new sroominfo(id, name, img, people, description, ip));
                 }
                 mAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 Toast.makeText(myfrag4_2.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
             }
         }
+
         private String convertInputStreamToString(InputStream inputStream) throws IOException {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line = "";
@@ -153,28 +162,33 @@ public class myfrag4_2 extends Activity  {
         String ip;
         String image;
 
-        public sroominfo( String id,String name,String img,String people,String desc,String ip) {
+        public sroominfo(String id, String name, String img, String people, String desc, String ip) {
 
-            this.id=id;
-            this.name=name;
-            this.description=desc;
-            this.people=people;
-            this.ip=ip;
-            this.image=img;
+            this.id = id;
+            this.name = name;
+            this.description = desc;
+            this.people = people;
+            this.ip = ip;
+            this.image = img;
         }
 
         public String getId() {
             return id;
         }
+
         public String getName() {
             return name;
         }
+
         public String getDescription() {
             return description;
         }
 
-        public String getPeople(){return people;}
-         public String getImage() {
+        public String getPeople() {
+            return people;
+        }
+
+        public String getImage() {
             return image;
         }
     }
@@ -213,17 +227,19 @@ public class myfrag4_2 extends Activity  {
             holder.txroom.setText(getItem(position).getName());
             holder.txpeople.setText(getItem(position).getPeople());
             holder.txdesc.setText(getItem(position).getDescription());
-            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImage(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT + "/" + getItem(position).getImage(), mImageLoader);
             return convertView;
         }
     }
 
-   public void SRRclick(View v){
-       Intent intent = new Intent(myfrag4_2.this, myfrag4_3.class);
-       intent.putExtra("id",id);
-       startActivity(intent);
-   }
-    public void finishregister(View v){
-       //서버랑 연결
+    public void SRRclick(View v) {
+        Intent intent = new Intent(myfrag4_2.this, myfrag4_3.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+        finish();
+    }
+
+    public void finishregister(View v) {
+        //서버랑 연결
     }
 }

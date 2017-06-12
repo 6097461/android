@@ -65,7 +65,6 @@ public class myfrag4_3 extends Activity {
         startActivityForResult(intent, PICK_IMAGE);
     }
 
-
     public String POST(String url){
         InputStream is = null;
         String result = "";
@@ -131,25 +130,13 @@ public class myfrag4_3 extends Activity {
 
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-            dos.flush(); // finish upload...
+            dos.flush();
 
             if(conn.getResponseCode() == HttpURLConnection.HTTP_OK)
                 Log.i("테스트", "성공성공");
             else
                 Log.i("테스트", "실패");
-            try {
-                is = conn.getInputStream();
-                if(is != null)
-                    result = convertInputStreamToString(is);
-                else
-                    result = "Did not work!";
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            finally {
-                conn.disconnect();
-            }
+
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -170,7 +157,6 @@ public class myfrag4_3 extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
@@ -184,12 +170,8 @@ public class myfrag4_3 extends Activity {
                     Log.i("파일", "파일성공");
 
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    Log.i("파일", "파일에러");
                     e.printStackTrace();
                 } catch (IOException e) {
-                    Log.i("파일", "파일에러");
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -230,21 +212,11 @@ public class myfrag4_3 extends Activity {
 
             HttpAsyncTask httpTask = new HttpAsyncTask();
             httpTask.execute(MainActivity.SERVER_IP_PORT+"/host/add/"+id);
-            Intent intent=new Intent(myfrag4_3.this,myfrag4_2.class);
+            Intent intent = new Intent(myfrag4_3.this,myfrag4_2.class);
             intent.putExtra("id",id);
             startActivity(intent);
-
+            finish();
         }
     };
 
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
-        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        return result;
-    }
 }
