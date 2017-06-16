@@ -90,7 +90,7 @@ public class login extends Activity {
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.i("facebookresult", object.toString());
+
                         try{
                             id = object.getString("id");
                             name = object.getString("name");
@@ -140,7 +140,7 @@ public class login extends Activity {
                 String refreshToken = mOAuthLoginModule.getRefreshToken(mContext);
                 long expiresAt = mOAuthLoginModule.getExpiresAt(mContext);
                 String tokenType = mOAuthLoginModule.getTokenType(mContext);
-                Log.i("출력", accessToken);
+
                 token = accessToken;
                 login_i = NAVER_LOGIN;
                 naverloginDB logindb = new naverloginDB();
@@ -168,14 +168,14 @@ public class login extends Activity {
     public String naverPOST() {
         try {
             String apiURL = "";
-            Log.i("login", "execute시작!");
+
 
             String COOKIES_HEADER = "Set-Cookie";
             apiURL = MainActivity.SERVER_IP_PORT+"/auth/naver";
 
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            Log.i("login", "연결!?!?!?!");
+
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestMethod("POST");
@@ -185,15 +185,15 @@ public class login extends Activity {
             con.setUseCaches(false);
             con.setDefaultUseCaches(false);
 
-            Log.i("login", "연결직전");
+
             con.connect();
 
-            Log.i("login", "연결!");
+
             JSONObject data = new JSONObject();
 
             data.accumulate("access_token", token);
             json = data.toString();
-            Log.i("JSONdata", json);
+
 
             OutputStream wr = con.getOutputStream();
 
@@ -215,14 +215,13 @@ public class login extends Activity {
 
                 }
             }
-            Log.i("login", "쓰기성공!");
+
 
             int responseCode = con.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                Log.i("login", "정상");
-            } else {
-                Log.i("login", "에러!");
+
+            } else {  Log.i("login", "에러!");
             }
 
         } catch (Exception e) {
@@ -242,7 +241,7 @@ public class login extends Activity {
     public String facebookPOST() {
         try {
             String apiURL = "";
-            Log.i("login", "execute시작!");
+
 
             String COOKIES_HEADER = "Set-Cookie";
 
@@ -250,7 +249,7 @@ public class login extends Activity {
 
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            Log.i("login", "연결!?!?!?!");
+
             con.setRequestProperty("Accept", "application/json");
             con.setRequestProperty("Content-Type", "application/json");
             con.setRequestMethod("POST");
@@ -260,18 +259,17 @@ public class login extends Activity {
             con.setUseCaches(false);
             con.setDefaultUseCaches(false);
 
-            Log.i("login", "연결직전");
+
             con.connect();
 
-            Log.i("login", "연결!");
+
             JSONObject data = new JSONObject();
 
             data.accumulate("id", id);
             data.accumulate("name", name);
-            Log.i("ididididid!!!!", id);
-            Log.i("namenamename!!!!!", name);
+
             json = data.toString();
-            Log.i("JSONdata", json);
+
 
             OutputStream wr = con.getOutputStream();
 
@@ -293,14 +291,14 @@ public class login extends Activity {
 
                 }
             }
-            Log.i("login", "쓰기성공!");
+
 
             int responseCode = con.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                Log.i("login", "정상");
+
             } else {
-                Log.i("login", "에러!");
+
             }
 
         } catch (Exception e) {
@@ -309,8 +307,6 @@ public class login extends Activity {
         return null;
     }
 
-    public void gbtnclick(View v) {
-        Log.i("server request", "google");
-    }
+
 
 }

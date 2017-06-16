@@ -72,7 +72,6 @@ public class img extends Activity  {
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
 
             try {
                 URL myFileUrl = new URL(urls[0]);
@@ -80,11 +79,11 @@ public class img extends Activity  {
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
-                conn.connect();
-                Log.i("task", "연결!");
 
-                Log.i("task", "비트맵?");
+                conn.connect();
+
+
+
                 InputStream inputStream = conn.getInputStream();
 
                 if (inputStream != null)
@@ -106,7 +105,7 @@ public class img extends Activity  {
                 for(int i=0 ;i<jsonMainNode.length();i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
                     String image = jsonChildNode.getString("img");
-                    Log.i("image", image);
+
                     rArray.add(new imageinfo(image));
                 }
                 mAdapter.notifyDataSetChanged();

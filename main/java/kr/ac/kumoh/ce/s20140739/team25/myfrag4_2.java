@@ -1,45 +1,45 @@
 package kr.ac.kumoh.ce.s20140739.team25;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.app.Activity;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.support.annotation.NonNull;
+        import android.support.annotation.Nullable;
+        import android.support.v4.app.Fragment;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AdapterView;
+        import android.widget.ArrayAdapter;
+        import android.widget.Button;
+        import android.widget.ListView;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+        import com.android.volley.Cache;
+        import com.android.volley.Network;
+        import com.android.volley.RequestQueue;
+        import com.android.volley.toolbox.BasicNetwork;
+        import com.android.volley.toolbox.DiskBasedCache;
+        import com.android.volley.toolbox.HurlStack;
+        import com.android.volley.toolbox.ImageLoader;
+        import com.android.volley.toolbox.NetworkImageView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+        import java.io.BufferedReader;
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.io.InputStreamReader;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by 60974 on 2017-04-04.
@@ -77,7 +77,7 @@ public class myfrag4_2 extends Activity {
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
         back task = new back();
         task.execute(MainActivity.SERVER_IP_PORT + "/host/info/" + id);
-        Button bt_finish = (Button)findViewById(R.id.finish);
+        Button bt_finish = (Button) findViewById(R.id.finish);
         bt_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,7 +89,6 @@ public class myfrag4_2 extends Activity {
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
 
             try {
                 URL myFileUrl = new URL(urls[0]);
@@ -97,11 +96,10 @@ public class myfrag4_2 extends Activity {
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
-                conn.connect();
-                Log.i("task", "연결!");
 
-                Log.i("task", "비트맵?");
+                conn.connect();
+
+
                 InputStream inputStream = conn.getInputStream();
 
                 if (inputStream != null)
@@ -123,16 +121,13 @@ public class myfrag4_2 extends Activity {
                 for (int i = 0; i < jsonMainNode.length(); i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
                     String id = jsonChildNode.getString("id");
-                    Log.i("id", id);
+
                     String name = jsonChildNode.getString("name");
-                    Log.i("rname", name);
+
                     String people = jsonChildNode.getString("max");
                     String img = jsonChildNode.getString("img");
-                    Log.i("image", img);
                     String description = jsonChildNode.getString("description");
-                    Log.i("description", description);
                     String ip = jsonChildNode.getString("ip");
-                    Log.i("ip", ip);
                     rArray.add(new sroominfo(id, name, img, people, description, ip));
                 }
                 mAdapter.notifyDataSetChanged();
@@ -148,7 +143,6 @@ public class myfrag4_2 extends Activity {
             while ((line = bufferedReader.readLine()) != null)
                 result += line;
             inputStream.close();
-            Log.i("실행", "완료");
             return result;
         }
     }

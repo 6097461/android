@@ -85,7 +85,7 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
+
 
             try {
                 URL myFileUrl = new URL(urls[0]);
@@ -93,11 +93,10 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
-                conn.connect();
-                Log.i("task", "연결!");
 
-                Log.i("task", "비트맵?");
+                conn.connect();
+
+
                 InputStream inputStream = conn.getInputStream();
 
                 if (inputStream != null)
@@ -119,15 +118,10 @@ public class myfrag1 extends Fragment implements AdapterView.OnItemClickListener
                 for(int i=0 ;i<jsonMainNode.length();i++) {
                     JSONObject jsonChildNode = jsonMainNode.getJSONObject(i);
                     String adid=jsonChildNode.getString("adminId");
-                    Log.i("adminid", adid);
                     String id=jsonChildNode.getString("id");
-                    Log.i("id", id);
                     String rname = jsonChildNode.getString("name");
-                    Log.i("rname", rname);
                     String loc = jsonChildNode.getString("address");
-                    Log.i("loc", loc);
                     String image = jsonChildNode.getString("img");
-                    Log.i("image", image);
                     rArray.add(new roominfo(adid,id,rname, loc,image));
                 }
                 mAdapter.notifyDataSetChanged();

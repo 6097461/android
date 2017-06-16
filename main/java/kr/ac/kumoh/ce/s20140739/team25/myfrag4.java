@@ -96,7 +96,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
+
 
             try {
                 URL myFileUrl = new URL(urls[0]);
@@ -106,14 +106,12 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
                     conn.setRequestProperty("Cookie", login.cookieString);
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
+
                 conn.connect();
-                Log.i("task", "연결!");
+
                 if (conn.getResponseCode() == 404) {
                     return null;
                 }
-                Log.i("task", "비트맵?");
-                Log.i("responce code", "" + conn.getResponseCode());
 
                 InputStream inputStream = conn.getInputStream();
 
@@ -150,7 +148,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
                 for (int i = 0; i < rpeoplelist.length(); i++) {
                     JSONObject jsonObject = rpeoplelist.getJSONObject(i);
                     String id = jsonObject.getString("id");
-                    Log.i("레저베이션 id", id);
+
                     String user = jsonObject.getString("user");
                     String rname = jsonObject.getString("studyroom");
                     String sname = jsonObject.getString("room");
@@ -166,7 +164,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
 
             } catch (JSONException e) {
                 Toast.makeText(getActivity(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
-                Log.i("EEEEEEEEEEEEE", e.toString());
+
             }
         }
 
@@ -177,7 +175,7 @@ public class myfrag4 extends Fragment implements AdapterView.OnItemClickListener
             while ((line = bufferedReader.readLine()) != null)
                 result += line;
             inputStream.close();
-            Log.i("실행", "완료");
+
             return result;
         }
     }

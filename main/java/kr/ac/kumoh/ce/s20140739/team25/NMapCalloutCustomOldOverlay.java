@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package kr.ac.kumoh.ce.s20140739.team25;
-
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -32,8 +31,8 @@ import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
 
 /**
  * Customized callout overlay.
- * 
- * @author kyjkim 
+ *
+ * @author kyjkim
  */
 public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 	private static final String LOG_TAG = "NMapCalloutCustomOverlay";
@@ -84,7 +83,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 	private final String mTailText;
 	private float mTailTextWidth;
 
-	/** 
+	/**
 	 * Resource provider should implement this interface
 	 */
 	public static interface ResourceProvider {
@@ -99,7 +98,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 	}
 
 	public NMapCalloutCustomOldOverlay(NMapOverlay itemOverlay, NMapOverlayItem item, Rect itemBounds,
-		NMapCalloutCustomOldOverlay.ResourceProvider resourceProvider) {
+									   NMapCalloutCustomOldOverlay.ResourceProvider resourceProvider) {
 
 		super(itemOverlay, item, itemBounds);
 
@@ -129,7 +128,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 
 		if (resourceProvider == null) {
 			throw new IllegalArgumentException(
-				"NMapCalloutCustomOverlay.ResourceProvider should be provided on creation of NMapCalloutCustomOverlay.");
+					"NMapCalloutCustomOverlay.ResourceProvider should be provided on creation of NMapCalloutCustomOverlay.");
 		}
 
 		mBackgroundDrawable = resourceProvider.getCalloutBackground(item);
@@ -171,9 +170,9 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 	protected boolean hitTest(int hitX, int hitY) {
 
 		// hit test for right button only ?
-		//    	if (mRightButtonRect != null) {
-		//    		return  mRightButtonRect.contains(hitX, hitY);
-		//    	}
+		//       if (mRightButtonRect != null) {
+		//          return  mRightButtonRect.contains(hitX, hitY);
+		//       }
 
 		return super.hitTest(hitX, hitY);
 	}
@@ -249,7 +248,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 
 				left = mRightButtonRect.left + (mCalloutRightButtonWidth - mTempRect.width()) / 2;
 				top = mRightButtonRect.top + (mCalloutRightButtonHeight - mTempRect.height()) / 2 + mTempRect.height()
-					+ mTitleOffsetY;
+						+ mTitleOffsetY;
 				canvas.drawText(mRightButtonText, left, top, mTextPaint);
 			}
 		}
@@ -268,7 +267,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 		}
 	}
 
-	/* Internal Functions */
+   /* Internal Functions */
 
 	private void drawBackground(Canvas canvas) {
 
@@ -291,8 +290,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 			mWidthTitleTruncated = mapViewWidth;
 			float maxWidth = mWidthTitleTruncated - 2 * mMarginX - 2 * mPaddingX;
 			if (DEBUG) {
-				Log.i(LOG_TAG, "adjustTextBounds: maxWidth=" + maxWidth + ", mMarginX=" + mMarginX + ", mPaddingX="
-					+ mPaddingX);
+
 			}
 
 			if (mDrawableRightButton != null) {
@@ -307,13 +305,12 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 			}
 
 			final String title = TextUtils.ellipsize(mOverlayItem.getTitle(), mTextPaint, maxWidth,
-				TextUtils.TruncateAt.END).toString();
+					TextUtils.TruncateAt.END).toString();
 
 			mTitleTruncated = title;
 
 			if (DEBUG) {
-				Log.i(LOG_TAG, "adjustTextBounds: mTitleTruncated=" + mTitleTruncated + ", length="
-					+ mTitleTruncated.length());
+
 			}
 		}
 
@@ -328,8 +325,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 		}
 
 		if (DEBUG) {
-			Log.i(LOG_TAG, "adjustTextBounds: mTempRect.width=" + mTempRect.width() + ", mTempRect.height="
-				+ mTempRect.height());
+
 		}
 
 		//  Setup the callout with the right size & location
@@ -347,7 +343,7 @@ public class NMapCalloutCustomOldOverlay extends NMapCalloutOverlay {
 		// set position
 		float left = mTempPoint.x - (int)(mTempRectF.width() * mOverlayItem.getAnchorXRatio());
 		float top = mTempPoint.y - (int)(mItemBounds.height() * mOverlayItem.getAnchorYRatio()) - mItemGapY
-			- mTotalHeight;
+				- mTotalHeight;
 		mTempRectF.set(left, top, left + mTempRectF.width(), top + mTempRectF.height());
 
 	}

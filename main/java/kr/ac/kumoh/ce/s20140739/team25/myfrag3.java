@@ -107,7 +107,6 @@ public class myfrag3 extends Fragment {
     private class logoutRequest extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
 
             try {
                 URL url = new URL(urls[0]);
@@ -116,12 +115,9 @@ public class myfrag3 extends Fragment {
                 conn.setRequestProperty("Cookie", login.cookieString);
                 conn.setDoInput(true);
 
-                Log.i("Logout", "연결?");
                 conn.connect();
-                Log.i("Logout", "연결!");
 
                 InputStream inputStream = conn.getInputStream();
-                Log.i("Logout", "받아옴!");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -133,7 +129,6 @@ public class myfrag3 extends Fragment {
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
 
             try{
                 URL myFileUrl = new URL(urls[0]);
@@ -143,15 +138,11 @@ public class myfrag3 extends Fragment {
                     conn.setRequestProperty("Cookie", login.cookieString);
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
                 conn.connect();
-                Log.i("task", "연결!");
                 if(conn.getResponseCode() == 404){
                     goLogin();
                     return null;
                 }
-                Log.i("task", "비트맵?");
-                Log.i("responce code",""+conn.getResponseCode());
 
                 InputStream inputStream = conn.getInputStream();
 
@@ -172,11 +163,9 @@ public class myfrag3 extends Fragment {
                 JSONObject jsResult = new JSONObject(str);
                 JSONObject user = jsResult.getJSONObject("user");
                 JSONArray reservationlist = jsResult.getJSONArray("reservations");
-                Log.i("reservationlist.length", ""+reservationlist.length());
                 String id = user.getString("id");
                 String dpName = user.getString("displayName");
                 name.setText(dpName);
-                Log.i("str", str);
 
                 for(int i=0; i < reservationlist.length(); i++) {
                     JSONObject jsonObject = reservationlist.getJSONObject(i);
@@ -193,15 +182,12 @@ public class myfrag3 extends Fragment {
                     rArray.add(new reservinfo(image,idd,rname,sname,address,date,time,people));
 
                 }
-                Log.i("post끗", "끝");
 
                 mAdapter.notifyDataSetChanged();
-                Log.i("post끗", "진짜끝");
 
             }
             catch (JSONException e) {
                 Toast.makeText(getActivity(), "Error" + e.toString(), Toast.LENGTH_LONG).show();
-                Log.i("EEEEEEEEEEEEE", e.toString());
             }
         }
         private String convertInputStreamToString(InputStream inputStream) throws IOException{
@@ -211,7 +197,6 @@ public class myfrag3 extends Fragment {
             while((line = bufferedReader.readLine()) != null)
                 result += line;
             inputStream.close();
-            Log.i("실행", "완료");
             return result;
         }
     }

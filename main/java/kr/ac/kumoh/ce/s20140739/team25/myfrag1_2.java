@@ -1,31 +1,31 @@
 package kr.ac.kumoh.ce.s20140739.team25;
 
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.app.Activity;
+        import android.content.Intent;
+        import android.graphics.Color;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.util.Log;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.CalendarView;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.android.volley.toolbox.NetworkImageView;
+        import com.android.volley.toolbox.NetworkImageView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+        import java.io.BufferedReader;
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.io.InputStreamReader;
+        import java.io.OutputStream;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
 
 /**
  * Created by 60974 on 2017-04-04.
@@ -57,7 +57,7 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
         reservation = (Button) findViewById(R.id.reservation);
         roomid = getIntent().getStringExtra("id");
 
-        Log.i("룸아이디요요요ㅛㅇ", roomid);
+
         tv = (TextView) findViewById(R.id.tx);
         CalendarView calendar = (CalendarView) findViewById(R.id.calendar);
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -98,8 +98,6 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
                         break;
                     }
                 }
-                Log.i("start", ""+start_time);
-                Log.i("end", ""+end_time);
 
                 reservationPostRequest reservationpostrequest = new reservationPostRequest();
                 reservationpostrequest.execute();
@@ -114,7 +112,6 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
 
             try {
                 URL myFileUrl = new URL(urls[0]);
@@ -122,11 +119,8 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
                 conn.connect();
-                Log.i("task", "연결!");
 
-                Log.i("task", "비트맵?");
                 InputStream inputStream = conn.getInputStream();
 
                 if (inputStream != null)
@@ -217,10 +211,8 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
         protected Void doInBackground(Void... unused) {
             String json;
             try {
-                Log.i("roomRequest", "execute시작!");
 
                 String apiURL = MainActivity.SERVER_IP_PORT + "/home/reservation/" + roomid;
-                Log.i("URL", apiURL);
                 URL url = new URL(apiURL);
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestProperty("Accept", "application/json");
@@ -234,9 +226,7 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
                 con.setUseCaches(false);
                 con.setDefaultUseCaches(false);
 
-                Log.i("roomRequest", "연결직전");
                 con.connect();
-                Log.i("roomRequest", "연결!");
 
                 JSONObject data = new JSONObject();
                 data.accumulate("date", reservationDate);
@@ -245,20 +235,16 @@ public class myfrag1_2 extends Activity implements View.OnClickListener {
                 data.accumulate("number", number);
 
                 json = data.toString();
-                Log.i("JSONdata", json);
 
                 OutputStream wr = con.getOutputStream();
                 wr.write(json.getBytes("utf-8"));
                 wr.flush();
                 wr.close();
 
-                Log.i("roomRequest", "쓰기성공!");
 
                 int responseCode = con.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    Log.i("roomRequest", "정상");
                 } else {
-                    Log.i("roomRequest", "에러!");
                 }
             } catch (Exception e) {
                 System.out.println(e);

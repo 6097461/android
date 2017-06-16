@@ -91,7 +91,7 @@ public class myfrag4_1 extends Activity {
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=\"address\"\r\n\r\n" + URLEncoder.encode(adr.getText().toString(), "utf-8"));
             dos.writeBytes(lineEnd);
-            Log.i("죽을랑가!!!!!", "!! !!!");
+
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + pickpath + "\"" + lineEnd);
@@ -99,9 +99,9 @@ public class myfrag4_1 extends Activity {
 
             String realpath = pickpath;
             FileInputStream fileInputStream = new FileInputStream(realpath);
-            Log.i("우오오오오ㅗ오오오!!!!!", "!! !!!");
+
             int bytesAvailable = fileInputStream.available();
-            Log.i("byteAvailble값값값!!!!!", "!!" + Integer.toString(bytesAvailable) + "!!!");
+
             int maxBufferSize = 1024;
             int bufferSize = Math.min(bytesAvailable, maxBufferSize);
             byte[] buffer = new byte[bufferSize];
@@ -120,10 +120,6 @@ public class myfrag4_1 extends Activity {
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
             dos.flush(); // finish upload...
 
-            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK)
-                Log.i("테스트", "성공성공");
-            else
-                Log.i("테스트", "실패");
             try {
                 is = conn.getInputStream();
                 if (is != null)
@@ -164,14 +160,11 @@ public class myfrag4_1 extends Activity {
                     ImageView image = (ImageView) findViewById(R.id.rimg);
 
                     image.setImageBitmap(image_bitmap);
-                    Log.i("파일", "파일성공");
 
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block
-                    Log.i("파일", "파일에러");
                     e.printStackTrace();
                 } catch (IOException e) {
-                    Log.i("파일", "파일에러");
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -189,7 +182,6 @@ public class myfrag4_1 extends Activity {
         cursor.moveToNext();
         String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
         Uri uri = Uri.fromFile(new File(path));
-        Log.i("방 !!", "getRealPathFromURI(), path : " + uri.toString());
         cursor.close();
 
         return path;

@@ -1,68 +1,69 @@
 package kr.ac.kumoh.ce.s20140739.team25;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Rect;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.nhn.android.maps.NMapActivity;
-import com.nhn.android.maps.NMapCompassManager;
-import com.nhn.android.maps.NMapContext;
-import com.nhn.android.maps.NMapController;
-import com.nhn.android.maps.NMapLocationManager;
-import com.nhn.android.maps.NMapOverlay;
-import com.nhn.android.maps.NMapOverlayItem;
-import com.nhn.android.maps.NMapView;
-import com.nhn.android.maps.maplib.NGeoPoint;
-import com.nhn.android.maps.nmapmodel.NMapError;
-import com.nhn.android.maps.nmapmodel.NMapPlacemark;
-import com.nhn.android.maps.overlay.NMapPOIdata;
-import com.nhn.android.maps.overlay.NMapPOIitem;
-import com.nhn.android.mapviewer.overlay.NMapCalloutCustomOverlay;
-import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
-import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
-import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
-import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
+        import android.app.Activity;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.content.SharedPreferences;
+        import android.graphics.Rect;
+        import android.os.AsyncTask;
+        import android.os.Bundle;
+        import android.provider.Settings;
+        import android.support.annotation.NonNull;
+        import android.support.annotation.Nullable;
+        import android.support.v4.app.Fragment;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.MotionEvent;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AdapterView;
+        import android.widget.ArrayAdapter;
+        import android.widget.BaseAdapter;
+        import android.widget.ImageView;
+        import android.widget.ListView;
+        import android.widget.ScrollView;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+        import com.android.volley.Cache;
+        import com.android.volley.Network;
+        import com.android.volley.RequestQueue;
+        import com.android.volley.toolbox.BasicNetwork;
+        import com.android.volley.toolbox.DiskBasedCache;
+        import com.android.volley.toolbox.HurlStack;
+        import com.android.volley.toolbox.ImageLoader;
+        import com.android.volley.toolbox.NetworkImageView;
+        import com.nhn.android.maps.NMapActivity;
+        import com.nhn.android.maps.NMapCompassManager;
+        import com.nhn.android.maps.NMapContext;
+        import com.nhn.android.maps.NMapController;
+        import com.nhn.android.maps.NMapLocationManager;
+        import com.nhn.android.maps.NMapOverlay;
+        import com.nhn.android.maps.NMapOverlayItem;
+        import com.nhn.android.maps.NMapView;
+        import com.nhn.android.maps.maplib.NGeoPoint;
+        import com.nhn.android.maps.nmapmodel.NMapError;
+        import com.nhn.android.maps.nmapmodel.NMapPlacemark;
+        import com.nhn.android.maps.overlay.NMapPOIdata;
+        import com.nhn.android.maps.overlay.NMapPOIitem;
+        import com.nhn.android.mapviewer.overlay.NMapCalloutCustomOverlay;
+        import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
+        import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
+        import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
+        import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
+
+        import java.io.BufferedReader;
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.io.InputStreamReader;
+        import java.net.HttpURLConnection;
+        import java.net.URL;
+        import java.util.ArrayList;
+        import java.util.List;
 
 
 /**
@@ -122,6 +123,7 @@ public class myfrag1_1 extends Activity {
     private NMapContext a;
 
     ScrollView sv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,7 +134,7 @@ public class myfrag1_1 extends Activity {
 //        String img = intent.getStringExtra("img");
         rArray = new ArrayList<myfrag1_1.sroominfo>();
         mAdapter = new myfrag1_1.sroomAdapter(this, R.layout.listitem2, rArray);
-        sv = (ScrollView)findViewById(R.id.all);
+        sv = (ScrollView) findViewById(R.id.all);
         mList = (ListView) findViewById(R.id.listview2);
         mList.setAdapter(mAdapter);
         mList.setOnTouchListener(new View.OnTouchListener() {
@@ -140,9 +142,9 @@ public class myfrag1_1 extends Activity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 sv.requestDisallowInterceptTouchEvent(true);
                 return false;
-        }
+            }
         });
-        mMapContext =  new NMapContext(super.getBaseContext());
+        mMapContext = new NMapContext(super.getBaseContext());
         mMapContext.onCreate();
 
         mapView = (NMapView) findViewById(R.id.mapView);
@@ -197,15 +199,14 @@ public class myfrag1_1 extends Activity {
         mQueue.start();
         mImageLoader = new ImageLoader(mQueue, new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
         myfrag1_1.back task = new myfrag1_1.back();
-        task.execute(MainActivity.SERVER_IP_PORT+"/home/info/" + id);
+        task.execute(MainActivity.SERVER_IP_PORT + "/home/info/" + id);
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                if(login.cookieString == ""){
+                if (login.cookieString == "") {
                     goLogin();
-                }
-                else {
+                } else {
                     String id = mAdapter.getItem(i).getId();
                     Intent intent = new Intent(myfrag1_1.this, myfrag1_2.class);
                     intent.putExtra("id", id);
@@ -218,7 +219,7 @@ public class myfrag1_1 extends Activity {
 
     }
 
-    public void goLogin(){
+    public void goLogin() {
         Intent intent = new Intent(getApplicationContext(), login.class);
         startActivity(intent);
     }
@@ -258,7 +259,7 @@ public class myfrag1_1 extends Activity {
         super.onDestroy();
     }
 
-      private void POIdataOverlay(String name) {
+    private void POIdataOverlay(String name) {
         mOverlayManager.clearOverlays();
         int markerId = NMapPOIflagType.PIN;
 
@@ -396,13 +397,6 @@ public class myfrag1_1 extends Activity {
         @Override
         public void onLocationUpdateTimeout(NMapLocationManager locationManager) {
 
-            // stop location updating
-            //			Runnable runnable = new Runnable() {
-            //				public void run() {
-            //					stopMyLocation();
-            //				}
-            //			};
-            //			runnable.run();
 
             Toast.makeText(myfrag1_1.this, "Your current location is temporarily unavailable.", Toast.LENGTH_LONG).show();
         }
@@ -425,7 +419,7 @@ public class myfrag1_1 extends Activity {
             if (errorInfo == null) { // success
                 // restore map view state such as map center position and zoom level.
                 restoreInstanceState();
-               // startMyLocation();
+                // startMyLocation();
             } else { // fail
                 Log.e(LOG_TAG, "onFailedToInitializeWithError: " + errorInfo.toString());
 
@@ -571,7 +565,7 @@ public class myfrag1_1 extends Activity {
                 }
             }
 
-            // use custom old callout overlay
+
             if (overlayItem instanceof NMapPOIitem) {
                 NMapPOIitem poiItem = (NMapPOIitem) overlayItem;
 
@@ -581,11 +575,10 @@ public class myfrag1_1 extends Activity {
                 }
             }
 
-            // use custom callout overlay
+
             return new NMapCalloutCustomOverlay(itemOverlay, overlayItem, itemBounds, mMapViewerResourceProvider);
 
-            // set basic callout overlay
-            //return new NMapCalloutBasicOverlay(itemOverlay, overlayItem, itemBounds);
+
         }
 
     };
@@ -663,7 +656,7 @@ public class myfrag1_1 extends Activity {
     private class back extends AsyncTask<String, Integer, String> {
         @Override
         public String doInBackground(String... urls) {
-            Log.i("task", "실행?");
+
 
             try {
                 URL myFileUrl = new URL(urls[0]);
@@ -671,11 +664,10 @@ public class myfrag1_1 extends Activity {
                 conn.setRequestMethod("GET");
                 conn.setDoInput(true);
 
-                Log.i("task", "연결?");
-                conn.connect();
-                Log.i("task", "연결!");
 
-                Log.i("task", "비트맵?");
+                conn.connect();
+
+
                 InputStream inputStream = conn.getInputStream();
 
                 if (inputStream != null)
@@ -699,7 +691,7 @@ public class myfrag1_1 extends Activity {
                 name = studyroom.getString("name");
                 String address = studyroom.getString("address");
                 NetworkImageView immg = (NetworkImageView) findViewById(R.id.room);
-                immg.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + img, mImageLoader);
+                immg.setImageUrl(MainActivity.SERVER_IP_PORT + "/" + img, mImageLoader);
                 TextView nname = (TextView) findViewById(R.id.rname);
                 nname.setText(name);
                 TextView adr = (TextView) findViewById(R.id.address);
@@ -817,7 +809,7 @@ public class myfrag1_1 extends Activity {
             holder.txsroom.setText(getItem(position).getSroom());
             holder.txmax.setText(getItem(position).getMax());
             holder.txetc.setText(getItem(position).getEtc());
-            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT+"/" + getItem(position).getImg(), mImageLoader);
+            holder.imimage.setImageUrl(MainActivity.SERVER_IP_PORT + "/" + getItem(position).getImg(), mImageLoader);
             return convertView;
         }
     }
